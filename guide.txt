@@ -1,0 +1,133 @@
+
+npm install -g @react-native-community/cli
+npx react-native init YourProjectName
+
+npm install @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context
+npm install @react-native-async-storage/async-storage react-native-gesture-handler react-native-reanimated
+npm install --save-dev @babel/core @babel/runtime @types/react @types/react-native typescript @typescript-eslint/eslint-plugin @typescript-eslint/parser
+npx pod-install ios    # Only for iOS development on Mac
+npm i -D babel-plugin-module-resolver
+
+
+npm install --save-dev metro-config metro-react-native-babel-preset react-native-svg-transformer
+npm install react-native-reanimated react-native-svg
+
+npm i react-native-reanimated/plugin 
+
+
+
+package.json
+
+"link:fonts": "npx react-native-asset",
+"postinstall": "npx react-native link && npx pod-install && npx react-native-svg-transformer"
+
+npm run link:fonts (to set fonts in ios and android)
+
+
+1. Navigation and Core Packages
+
+npm install @react-navigation/native @react-navigation/native-stack
+npm install react-native-screens react-native-safe-area-context
+
+
+2. Animation and UI Packages
+
+npm install react-native-reanimated react-native-gesture-handler
+npm install react-native-svg react-native-svg-transformer
+npm install lottie-react-native
+npm install react-native-vector-icons
+npm install react-native-reanimated-carousel
+npm install react-native-linear-gradient
+npm install @homielab/react-native-auto-scroll
+npm install @0b0t3d/react-native-collapsible
+
+
+3. State Management and Storage
+
+npm install zustand
+npm install react-native-mmkv
+
+
+4. Maps and Location
+
+npm install react-native-maps
+npm install react-native-maps-directions
+npm install @react-native-community/geolocation
+
+
+5. Network and API
+
+npm install socket.io-client
+npm install axios
+npm install jwt-decode
+
+
+6. Utils and Responsive
+
+npm install react-native-responsive-fontsize
+
+
+package.json
+
+"pod-install": "cd ios && RCT_NEW_ARCH_ENABLED=1 bundle exec pod install"
+npm run pod-install
+
+android/app/src/main/res/values/strings.xml
+set app name 
+
+
+ios/app_name/info.plist
+change app name
+
+in info.plist 
+add
+<string>MaterialCommuityIcons.ttf</string>
+<string>MaterialIcons.ttf</string>
+<string>IonIcons.ttf</string>
+
+
+
+
+
+
+for maps: 
+
+in android/app/build.gradle 
+project.ext.vextoricons= [
+    IconFontNames: [MaterialCommuityIcons.ttf, MaterialIcons.ttf, IonIcons.ttf]
+]
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
+def enableProguardInReleaseBuilds= true (reduce apk size)
+
+
+
+android/app/src/main/AndroidManifest.xml (again for maps)
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+<application
+ android:usesCleartextTraffic="true"
+ android:theme="@style/ApppTheme"
+ android:hardwareAccelerated="true"   (for animations)
+ android:supportsRtl="true" 
+
+ <meta-data 
+    android:name="com.google.android.geo.API_KEY"
+    android:name="YOUR_GOOGLE_MAP_API_KEY"
+/>
+
+<activity
+        android:name=".MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+        android:launchMode="singleTask"
+        android:windowSoftInputMode="adjustResize" //adjustNothing
+        android:exported="true">
+.......................................................................
+
+
+check again for ios setup at 34 mins 48secs channel ritik prasad
+

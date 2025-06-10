@@ -2,21 +2,26 @@ import React, {useState} from 'react';
 import {View, TextInput, Button, Text, StyleSheet, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAuth} from '../../context/AuthContext';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../types/navigation';
 
-export default function SignupScreen({navigation}) {
-  const {login} = useAuth(); // For now, simulate login
+type Props = NativeStackScreenProps<AuthStackParamList, 'Signup'>;
+
+export default function SignupScreen({navigation}: Props) {
+  const {login} = useAuth(); // Simulated login
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignup = async () => {
-    if (!email || !password)
-      return Alert.alert('Error', 'All fields are required');
+    if (!email || !password) {
+      Alert.alert('Error', 'All fields are required');
+      return;
+    }
 
     try {
       await AsyncStorage.setItem('user', JSON.stringify({email}));
       await AsyncStorage.setItem('hasOnboarded', 'true');
-
-      login({email}); // ✅ Only login; navigation will auto-happen
+      login({email}); // Will auto-navigate if your AuthContext is wired to MainStack
     } catch (error) {
       console.error('Signup error:', error);
       Alert.alert('Signup failed', 'Something went wrong');
@@ -30,7 +35,6 @@ export default function SignupScreen({navigation}) {
         JSON.stringify({email: 'guest@guest.com'}),
       );
       await AsyncStorage.setItem('hasOnboarded', 'true');
-
       login({email: 'guest@guest.com'});
     } catch (error) {
       console.error('Guest error:', error);
@@ -59,9 +63,11 @@ export default function SignupScreen({navigation}) {
       />
 
       <Button title="Sign Up" onPress={handleSignup} />
+
       <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
         Already have an account? Login
       </Text>
+
       <Button title="Sign Up as a Guest user" onPress={handleGuestSignup} />
     </View>
   );

@@ -1,24 +1,31 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import {View, TextInput, Button, Text, StyleSheet, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../../context/AuthContext';
+import {useAuth} from '../../context/AuthContext';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {AuthStackParamList} from '../../types/navigation';
 
-export default function LoginScreen({ navigation }) {
-  const { login } = useAuth();
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+
+export default function LoginScreen({navigation}: Props) {
+  const {login} = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    if (!email || !password) return alert('Enter email & password');
+    if (!email || !password) {
+      Alert.alert('Error', 'All fields are required');
+      return;
+    }
 
     try {
       await AsyncStorage.setItem('isLoggedIn', 'true');
       await AsyncStorage.setItem('userEmail', email); // Optional
 
-      login({ email }); // Simulated login
+      login({email}); // Simulated login
     } catch (error) {
       console.error('Login error:', error);
-      alert('Login failed. Try again.');
+      Alert.alert('Login failed', 'Try again');
     }
   };
 
@@ -51,8 +58,8 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  input: { borderWidth: 1, padding: 10, marginVertical: 10, borderRadius: 5 },
-  link: { marginTop: 15, color: 'blue', textAlign: 'center' },
+  container: {flex: 1, justifyContent: 'center', padding: 20},
+  title: {fontSize: 24, fontWeight: 'bold', marginBottom: 20},
+  input: {borderWidth: 1, padding: 10, marginVertical: 10, borderRadius: 5},
+  link: {marginTop: 15, color: 'blue', textAlign: 'center'},
 });

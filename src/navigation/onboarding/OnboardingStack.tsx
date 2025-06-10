@@ -1,12 +1,13 @@
-// src/navigation/onboarding/OnboardingStack.js
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { OnboardingStackParamList } from '../../types/navigation';
 
 import Onboarding1 from '../../screens/onboarding/Onboarding1';
 import Onboarding2 from '../../screens/onboarding/Onboarding2';
 import Onboarding3 from '../../screens/onboarding/Onboarding3';
 
-const Stack = createNativeStackNavigator();
+// ⛑️ Strongly typed stack navigator
+const Stack = createNativeStackNavigator<OnboardingStackParamList>();
 
 export default function OnboardingStack() {
   return (

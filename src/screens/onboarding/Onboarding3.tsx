@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, ImageBackground, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useContext } from 'react';
+import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { OnboardingStackParamList, RootStackParamList } from '../../types/navigation';
 import { AuthContext } from '../../context/AuthContext';
 
-export default function Onboarding3({ navigation }) {
+type Props = NativeStackScreenProps<OnboardingStackParamList, 'Onboarding3'>;
+
+export default function Onboarding3({ navigation }: Props) {
   const { completeOnboarding } = useContext(AuthContext);
 
-  const handleComplete = async () => {
+  const handleComplete = async (): Promise<void> => {
     await completeOnboarding();
-    navigation.replace('Auth'); // navigate to auth stack
+
+    // ⛑️ Cast parent navigator to RootStackNavigationProp to use `replace`
+    const parentNav = navigation.getParent() as NativeStackNavigationProp<RootStackParamList>;
+    parentNav.replace('AuthStack', { screen: 'Login' });
   };
 
   return (
     <ImageBackground source={require('../../assets/images/onboarding3.png')} style={styles.bg}>
       <SafeAreaView style={styles.overlay}>
-        <Text style={styles.title}>Let’s Get Started</Text>
+        <Text style={styles.title}>Let's Get Started</Text>
         <Text style={styles.text}>Sign up or log in to start your journey.</Text>
         <Button title="Get Started" onPress={handleComplete} />
         <TouchableOpacity onPress={handleComplete}>

@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import {View, TextInput, Button, Text, StyleSheet, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useAuth} from '../../context/AuthContext';
+import { useAuthStore } from '../../store/authStore';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../types/navigation';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 export default function LoginScreen({navigation}: Props) {
-  const {login} = useAuth();
+  const {login} = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 

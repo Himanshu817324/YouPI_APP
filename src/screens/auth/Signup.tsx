@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
 import {View, TextInput, Button, Text, StyleSheet, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useAuth} from '../../context/AuthContext';
+import { useAuthStore } from '../../store/authStore';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../types/navigation';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Signup'>;
 
 export default function SignupScreen({navigation}: Props) {
-  const {login} = useAuth(); // Simulated login
+  const {login} = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,7 +21,7 @@ export default function SignupScreen({navigation}: Props) {
     try {
       await AsyncStorage.setItem('user', JSON.stringify({email}));
       await AsyncStorage.setItem('hasOnboarded', 'true');
-      login({email}); // Will auto-navigate if your AuthContext is wired to MainStack
+      login({email});
     } catch (error) {
       console.error('Signup error:', error);
       Alert.alert('Signup failed', 'Something went wrong');

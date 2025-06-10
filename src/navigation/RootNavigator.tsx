@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import { AuthContext } from '../context/AuthContext';
-
+import { useAuthStore } from '../store/authStore';
 import OnboardingStack from './onboarding/OnboardingStack';
 import AuthStack from './auth/AuthStack';
 import MainStack from './main/MainStack';
@@ -11,7 +10,7 @@ import { RootStackParamList } from '../types/navigation';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
-  const { user, loading, hasOnboarded } = useContext(AuthContext);
+  const { user, loading, hasOnboarded } = useAuthStore();
 
   if (loading) {
     return (

@@ -1,19 +1,18 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Button, ImageBackground, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { OnboardingStackParamList, RootStackParamList } from '../../types/navigation';
-import { AuthContext } from '../../context/AuthContext';
+import { useAuthStore } from '../../store/authStore';
 
 type Props = NativeStackScreenProps<OnboardingStackParamList, 'Onboarding3'>;
 
 export default function Onboarding3({ navigation }: Props) {
-  const { completeOnboarding } = useContext(AuthContext);
+  const completeOnboarding = useAuthStore(state => state.completeOnboarding);
 
   const handleComplete = async (): Promise<void> => {
     await completeOnboarding();
 
-    // ⛑️ Cast parent navigator to RootStackNavigationProp to use `replace`
     const parentNav = navigation.getParent() as NativeStackNavigationProp<RootStackParamList>;
     parentNav.replace('AuthStack', { screen: 'Login' });
   };

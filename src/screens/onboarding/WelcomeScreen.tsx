@@ -1,17 +1,13 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Dimensions,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../../types/navigation';
+import {View, StyleSheet, Text} from 'react-native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {OnboardingStackParamList} from '../../types/navigation';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import LogoWithCircles from '../../components/atoms/LogoWithCircles';
+import AppButton from '../../components/atoms/AppButton';
 
 type WelcomeScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
+  OnboardingStackParamList,
   'WelcomeScreen'
 >;
 
@@ -19,66 +15,35 @@ type Props = {
   navigation: WelcomeScreenNavigationProp;
 };
 
-const {width} = Dimensions.get('window');
-const CIRCLE_SIZE = 90;
-
-export default function WelcomeScreen ({ navigation }: Props) {
-  const overlap = CIRCLE_SIZE * 0.25;
-  const totalSpacing = CIRCLE_SIZE - overlap;
-
-  const centerX = width / 2;
-  const blackCircleX = centerX - totalSpacing / 2 - CIRCLE_SIZE / 2;
-  const whiteCircleX = centerX + totalSpacing / 2 - CIRCLE_SIZE / 2;
-
+export default function WelcomeScreen({navigation}: Props) {
   const handleGetStarted = () => {
     navigation.navigate('OnboardingScreen');
   };
 
   return (
-    <View style={[styles.container, {backgroundColor: '#fff'}]}>
-      <View style={styles.circleArea}>
-        <View
-          style={[styles.circle, styles.blackCircle, {left: blackCircleX}]}
-        />
+    <SafeAreaView style={styles.container}>
+      <LogoWithCircles circleSize={100} containerStyle={styles.logoContainer} />
 
-        <View
-          style={[
-            styles.circle,
-            {left: whiteCircleX, backgroundColor: '#3ED3A3'},
-          ]}
-        />
-
-        <Image
-          source={require('../../assets/black_logo.png')}
-          style={[
-            styles.logo,
-            {
-              left: blackCircleX + (CIRCLE_SIZE - 80) / 2,
-            },
-          ]}
-        />
-      </View>
-
-      <Text style={[styles.title, {color: '#000'}]}>Welcome to</Text>
-      <Text style={[styles.subtitle, {color: '#000'}]}>
-        Your Best Money Transfer Partner
-      </Text>
+      <Text style={styles.title}>Welcome to</Text>
+      <Text style={styles.subtitle}>Your Best Money Transfer Partner</Text>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
-          <Text style={styles.buttonText}>Get Started</Text>
-        </TouchableOpacity>
+        <AppButton
+          title="Get Started"
+          style={styles.loginButton}
+          onPress={handleGetStarted}
+        />
       </View>
 
       <View style={styles.footer}>
         <View style={styles.securedLine}>
-          <Text style={[styles.securedText, {color: '#000'}]}>Secured by </Text>
-          <Text style={[styles.securedBrand, {color: '#3ED3A3'}]}>You PI.</Text>
+          <Text style={styles.securedText}>Secured by </Text>
+          <Text style={styles.securedBrand}>You PI.</Text>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -86,37 +51,20 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 240,
+    backgroundColor: '#fff',
   },
-  circleArea: {
-    position: 'relative',
-    width: '100%',
-    height: CIRCLE_SIZE,
+  logoContainer: {
     marginBottom: 30,
-  },
-  circle: {
-    position: 'absolute',
-    width: CIRCLE_SIZE,
-    height: CIRCLE_SIZE,
-    borderRadius: CIRCLE_SIZE / 2,
-  },
-  blackCircle: {
-    backgroundColor: '#000',
-  },
-  logo: {
-    position: 'absolute',
-    width: 80,
-    height: 80,
-    resizeMode: 'contain',
-    top: (CIRCLE_SIZE - 80) / 2,
-    zIndex: 2,
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
+    color: '#000',
   },
   subtitle: {
     fontSize: 13,
     marginTop: 4,
+    color: '#000',
   },
   buttonContainer: {
     position: 'absolute',
@@ -124,11 +72,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
-  button: {
-    backgroundColor: '#3ED3A3',
-    paddingVertical: 15,
+  loginButton: {
     paddingHorizontal: 60,
     borderRadius: 19,
+    bottom: 30,
     elevation: 25,
     shadowColor: '#3ED3A3',
     shadowOffset: {
@@ -138,15 +85,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 400,
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
   footer: {
     position: 'absolute',
-    bottom: 40,
+    bottom: 80,
     width: '100%',
     alignItems: 'center',
   },
@@ -156,9 +97,11 @@ const styles = StyleSheet.create({
   },
   securedText: {
     fontSize: 12,
+    color: '#000',
   },
   securedBrand: {
     fontSize: 12,
     fontWeight: '500',
+    color: '#3ED3A3',
   },
 });

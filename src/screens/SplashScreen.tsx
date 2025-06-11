@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -6,15 +6,18 @@ import {
   Dimensions,
   Easing,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const CIRCLE_SIZE = 90;
 
-const SplashScreen = ({onComplete}: {onComplete: () => void}) => {
+const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const logoTranslateX = useRef(new Animated.Value(0)).current;
   const greenToWhite = useRef(new Animated.Value(0)).current;
   const bgColor = useRef(new Animated.Value(0)).current;
   const textColor = useRef(new Animated.Value(0)).current;
+
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     setTimeout(() => {
@@ -61,7 +64,6 @@ const SplashScreen = ({onComplete}: {onComplete: () => void}) => {
     outputRange: ['#3ED3A3', '#ffffff'],
   });
 
-  // X center of container
   const overlap = CIRCLE_SIZE * 0.25;
   const totalSpacing = CIRCLE_SIZE - overlap;
 
@@ -70,44 +72,48 @@ const SplashScreen = ({onComplete}: {onComplete: () => void}) => {
   const whiteCircleX = centerX + totalSpacing / 2 - CIRCLE_SIZE / 2;
 
   return (
-    <Animated.View style={[styles.container, {backgroundColor: bgInterpolate}]}>
+    <Animated.View
+      style={[
+        styles.container,
+        { backgroundColor: bgInterpolate, paddingTop: insets.top + 300},
+      ]}
+    >
+      {/* Circles and Logo */}
       <View style={styles.circleArea}>
-        <View
-          style={[styles.circle, styles.blackCircle, {left: blackCircleX}]}
-        />
-
+        <View style={[styles.circle, styles.blackCircle, { left: blackCircleX }]} />
         <Animated.View
           style={[
             styles.circle,
-            {left: whiteCircleX, backgroundColor: circleColor},
+            { left: whiteCircleX, backgroundColor: circleColor },
           ]}
         />
-
         <Animated.Image
           source={require('../assets/black_logo.png')}
           style={[
             styles.logo,
             {
               left: blackCircleX + (CIRCLE_SIZE - 80) / 2,
-              transform: [{translateX: logoTranslateX}],
+              transform: [{ translateX: logoTranslateX }],
             },
           ]}
         />
       </View>
 
-      <Animated.Text style={[styles.title, {color: textInterpolate}]}>
+      {/* Animated Text */}
+      <Animated.Text style={[styles.title, { color: textInterpolate }]}>
         You PI
       </Animated.Text>
-      <Animated.Text style={[styles.subtitle, {color: textInterpolate}]}>
+      <Animated.Text style={[styles.subtitle, { color: textInterpolate }]}>
         Your Best Money Transfer Partner
       </Animated.Text>
-      <View style={styles.footer}>
+
+      {/* Footer with safe area padding */}
+      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.securedLine}>
-          <Animated.Text style={[styles.securedText, {color: textInterpolate}]}>
+          <Animated.Text style={[styles.securedText, { color: textInterpolate }]}>
             Secured by{' '}
           </Animated.Text>
-          <Animated.Text
-            style={[styles.securedBrand, {color: textInterpolate}]}>
+          <Animated.Text style={[styles.securedBrand, { color: textInterpolate }]}>
             You PI.
           </Animated.Text>
         </View>
@@ -121,13 +127,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#fff', // or your desired background color
     position: 'absolute',
-     paddingTop: 240,
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
+    paddingTop: 240,
   },
   circleArea: {
     position: 'relative',
@@ -135,7 +140,6 @@ const styles = StyleSheet.create({
     height: CIRCLE_SIZE,
     marginBottom: 30,
   },
-
   circle: {
     position: 'absolute',
     width: CIRCLE_SIZE,
@@ -157,11 +161,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#3ED3A3',
+    marginTop: 10,
   },
   subtitle: {
     fontSize: 13,
-    color: '#3ED3A3',
     marginTop: 4,
   },
   footer: {
@@ -170,24 +173,16 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
-
-  securedBrandStatic: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#3ED3A3',
-  },
   securedLine: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   securedText: {
     fontSize: 12,
-    color: '#000',
   },
   securedBrand: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#3ED3A3',
   },
 });
 

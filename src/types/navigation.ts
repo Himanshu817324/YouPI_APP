@@ -9,7 +9,7 @@ export type OnboardingStackParamList = {
 // -------- Auth Stack --------
 export type AuthStackParamList = {
   Login: undefined;
-  Signup: undefined;
+  OTP: { phNo: string };
 };
 
 // -------- Main Tab Stack --------

@@ -12,6 +12,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useAuthStore } from './src/store/authStore';
 import SplashScreen from './src/screens/SplashScreen';
 import RootNavigator from './src/navigation/RootNavigator';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { height } = Dimensions.get('window');
 
@@ -26,7 +27,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    initializeAuth(); // Load auth state
+    initializeAuth();
   }, [initializeAuth]);
 
   const handleSplashComplete = () => {
@@ -41,23 +42,27 @@ export default function App() {
 
   if (isLoading) {
     return (
-      <Animated.View
-        style={[
-          StyleSheet.absoluteFillObject,
-          { transform: [{ translateY: slideAnim }] },
-        ]}
-      >
-        <SplashScreen onComplete={handleSplashComplete} />
-      </Animated.View>
+      <SafeAreaProvider>
+        <Animated.View
+          style={[
+            StyleSheet.absoluteFillObject,
+            { transform: [{ translateY: slideAnim }] },
+          ]}
+        >
+          <SplashScreen onComplete={handleSplashComplete} />
+        </Animated.View>
+      </SafeAreaProvider>
     );
   }
 
   return (
-    <View style={[styles.container, backgroundStyle]}>
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
-    </View>
+    <SafeAreaProvider>
+      <View style={[styles.container, backgroundStyle]}>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </View>
+    </SafeAreaProvider>
   );
 }
 

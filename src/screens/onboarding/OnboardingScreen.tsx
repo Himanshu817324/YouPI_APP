@@ -6,13 +6,14 @@ import {
   Image,
   Dimensions,
   FlatList,
-  TouchableOpacity,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
 import {useAuthStore} from '../../store/authStore';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {OnboardingStackParamList} from '../../types/navigation';
+import AppButton from '../../components/atoms/AppButton';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const {width} = Dimensions.get('window');
 
@@ -105,7 +106,7 @@ export default function OnboardingScreen({}: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <FlatList
         data={onboardingData}
         renderItem={renderItem}
@@ -130,11 +131,14 @@ export default function OnboardingScreen({}: Props) {
           ))}
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
+        {/* ✅ Use AppButton instead of TouchableOpacity */}
+        <AppButton
+          title="Login"
+          style={styles.loginButton}
+          onPress={handleLogin}
+        />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -175,6 +179,19 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
+  loginButton: {
+    paddingHorizontal: 60,
+    borderRadius: 19,
+    bottom: 30,
+    elevation: 25,
+    shadowColor: '#3ED3A3',
+    shadowOffset: {
+      width: 0,
+      height: 75,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 400,
+  },
   pagination: {flexDirection: 'row', marginBottom: 20},
   paginationDot: {
     width: 8,
@@ -186,22 +203,5 @@ const styles = StyleSheet.create({
   paginationDotActive: {
     backgroundColor: '#3ED3A3',
     width: 20,
-  },
-  button: {
-    backgroundColor: '#3ED3A3',
-    paddingVertical: 15,
-    paddingHorizontal: 60,
-    borderRadius: 19,
-    elevation: 25,
-    shadowColor: '#3ED3A3',
-    shadowOffset: {width: 0, height: 75},
-    shadowOpacity: 1,
-    shadowRadius: 400,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
   },
 });

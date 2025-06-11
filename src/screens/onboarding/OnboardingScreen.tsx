@@ -10,19 +10,15 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {useAuthStore} from '../../store/authStore';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {OnboardingStackParamList} from '../../types/navigation';
 
 const {width} = Dimensions.get('window');
 
-type RootStackParamList = {
-  Welcome: undefined;
-  Onboarding: undefined;
-};
-
-type OnboardingScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'Onboarding'
+type Props = NativeStackScreenProps<
+  OnboardingStackParamList,
+  'OnboardingScreen'
 >;
 
 interface OnboardingItem {
@@ -36,19 +32,22 @@ const onboardingData: OnboardingItem[] = [
   {
     id: '1',
     title: 'Easy, Fast & Trusted',
-    description: 'Fast money transfer and gauranteed safe transactions with You PI.',
+    description:
+      'Fast money transfer and guaranteed safe transactions with You PI.',
     image: require('../../assets/onboarding.png'),
   },
   {
     id: '2',
     title: 'Saving with You PI',
-    description: 'Track the progress of your savings and start a habit of saving with You PI.',
+    description:
+      'Track the progress of your savings and start a habit of saving with You PI.',
     image: require('../../assets/onboarding2.png'),
   },
   {
     id: '3',
     title: 'Free You PI Transactions',
-    description: 'Provides the quality of the financial system with free money transactions without any fees.',
+    description:
+      'Provides the quality of the financial system with free money transactions without any fees.',
     image: require('../../assets/onboarding3.png'),
   },
   {
@@ -59,36 +58,22 @@ const onboardingData: OnboardingItem[] = [
   },
 ];
 
-interface Props {
-  navigation: OnboardingScreenNavigationProp;
-}
-
-const OnboardingScreen = ({navigation}: Props) => {
+export default function OnboardingScreen({}: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const renderItem = ({item}: {item: OnboardingItem}) => {
-    // Helper function to highlight YouPI in text
-    const highlightYouPI = (text: string) => {
+    const highlightText = (text: string, style: any) => {
       const parts = text.split(/(YouPI|You PI)/);
       return (
-        <Text style={styles.title}>
-          {parts.map((part, index) => 
-            part === 'YouPI' || part === 'You PI' ? 
-              <Text key={index} style={[styles.title, {color: '#3ED3A3'}]}>{part}</Text> : 
+        <Text style={style}>
+          {parts.map((part, index) =>
+            part === 'YouPI' || part === 'You PI' ? (
+              <Text key={index} style={[style, {color: '#3ED3A3'}]}>
+                {part}
+              </Text>
+            ) : (
               part
-          )}
-        </Text>
-      );
-    };
-
-    const highlightDescription = (text: string) => {
-      const parts = text.split(/(YouPI|You PI)/);
-      return (
-        <Text style={styles.description}>
-          {parts.map((part, index) => 
-            part === 'YouPI' || part === 'You PI' ? 
-              <Text key={index} style={[styles.description, {color: '#3ED3A3'}]}>{part}</Text> : 
-              part
+            ),
           )}
         </Text>
       );
@@ -98,9 +83,9 @@ const OnboardingScreen = ({navigation}: Props) => {
       <View style={styles.slide}>
         <Image source={item.image} style={styles.image} />
         <View style={styles.titleContainer}>
-          {highlightYouPI(item.title)}
+          {highlightText(item.title, styles.title)}
         </View>
-        {highlightDescription(item.description)}
+        {highlightText(item.description, styles.description)}
       </View>
     );
   };
@@ -111,8 +96,12 @@ const OnboardingScreen = ({navigation}: Props) => {
     setCurrentSlide(Math.round(index));
   };
 
-  const handleLogin = async() => {
-    navigation.navigate('Login');
+  const handleLogin = async () => {
+    try {
+      await useAuthStore.getState().completeOnboarding();
+    } catch (e) {
+      console.error('Onboarding Completion Error:', e);
+    }
   };
 
   return (
@@ -141,27 +130,17 @@ const OnboardingScreen = ({navigation}: Props) => {
           ))}
         </View>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleLogin}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  slide: {
-    width,
-    alignItems: 'center',
-    padding: 20,
-  },
+  container: {flex: 1, backgroundColor: '#fff'},
+  slide: {width, alignItems: 'center', padding: 20},
   image: {
     width: width * 0.8,
     height: width * 0.8,
@@ -196,10 +175,7 @@ const styles = StyleSheet.create({
     right: 0,
     alignItems: 'center',
   },
-  pagination: {
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
+  pagination: {flexDirection: 'row', marginBottom: 20},
   paginationDot: {
     width: 8,
     height: 8,
@@ -218,10 +194,7 @@ const styles = StyleSheet.create({
     borderRadius: 19,
     elevation: 25,
     shadowColor: '#3ED3A3',
-    shadowOffset: {
-      width: 0,
-      height: 75,
-    },
+    shadowOffset: {width: 0, height: 75},
     shadowOpacity: 1,
     shadowRadius: 400,
   },
@@ -232,5 +205,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-export default OnboardingScreen;

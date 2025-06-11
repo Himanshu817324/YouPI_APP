@@ -8,15 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-
-type RootStackParamList = {
-  Welcome: undefined;
-  Onboarding: undefined;
-};
+import { RootStackParamList } from '../../types/navigation';
 
 type WelcomeScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
-  'Welcome'
+  'WelcomeScreen'
 >;
 
 type Props = {
@@ -26,7 +22,7 @@ type Props = {
 const {width} = Dimensions.get('window');
 const CIRCLE_SIZE = 90;
 
-const WelcomeScreen = ({ navigation }: Props) => {
+export default function WelcomeScreen ({ navigation }: Props) {
   const overlap = CIRCLE_SIZE * 0.25;
   const totalSpacing = CIRCLE_SIZE - overlap;
 
@@ -166,5 +162,3 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-
-export default WelcomeScreen;

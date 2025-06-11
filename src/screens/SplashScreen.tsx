@@ -120,8 +120,15 @@ const SplashScreen = ({onComplete}: {onComplete: () => void}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: '#fff', // or your desired background color
+    position: 'absolute',
+     paddingTop: 240,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   circleArea: {
     position: 'relative',

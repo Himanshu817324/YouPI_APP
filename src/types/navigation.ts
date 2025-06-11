@@ -2,9 +2,8 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 
 // -------- Onboarding Stack --------
 export type OnboardingStackParamList = {
-  Onboarding1: undefined;
-  Onboarding2: undefined;
-  Onboarding3: undefined;
+  WelcomeScreen: undefined;
+  OnboardingScreen: undefined;
 };
 
 // -------- Auth Stack --------

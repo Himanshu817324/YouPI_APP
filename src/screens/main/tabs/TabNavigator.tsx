@@ -7,6 +7,8 @@ import HomeScreen from './Home';
 import WalletScreen from './Wallet';
 import ActivityScreen from './Activity';
 import ProfileScreen from './Profile';
+import PlansScreen from './Plans';
+import SettingScreen from './Settings';
 
 const Tab = createBottomTabNavigator();
 

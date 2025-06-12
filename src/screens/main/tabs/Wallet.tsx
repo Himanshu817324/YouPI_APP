@@ -13,7 +13,6 @@ const WalletScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>NBFC Wallet</Text>
 
       <View style={styles.card}>
         <Text style={styles.cardTitle}>NBFC Wallet Balance</Text>
@@ -35,8 +34,9 @@ const WalletScreen = () => {
         </Text>
       </View>
 
-      <Text style={styles.sectionTitle}>How NBFC Wallet Works</Text>
+
       <View style={styles.howItWorksBox}>
+        <Text style={styles.sectionTitle}>How NBFC Wallet Works</Text>
         <Text style={styles.bullet}>• Receive ₹40-50 cashback when you purchase a 3-month recharge plan</Text>
         <Text style={styles.bullet}>• Use your wallet balance for future recharges</Text>
       </View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 20,
   },
   balance: {
     fontSize: 28,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 20,
     marginVertical: 10,
     fontWeight: '600',
   },
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   historyText: {
     color: '#888',
-    fontSize: 14,
+    fontSize: 18,
     textAlign: 'center',
   },
   howItWorksBox: {
@@ -104,8 +104,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   bullet: {
-    color: 'white',
-    fontSize: 14,
+    color: 'gray',
+    fontSize: 18,
     marginBottom: 8,
   },
 });

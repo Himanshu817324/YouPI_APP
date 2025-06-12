@@ -5,10 +5,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  useWindowDimensions,
+  ViewStyle,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {wp, hp, normalize} from '../../../utils/dimensions';
 
 interface OfferCardProps {
   colors: string[];
@@ -29,6 +32,14 @@ const OfferCard: React.FC<OfferCardProps> = ({ colors, title, highlight, descrip
 );
 
 const HomeScreen = () => {
+  const {width} = useWindowDimensions();
+
+  // Adjust layout based on screen width
+  const quickActionsStyle: ViewStyle = {
+    ...styles.quickActions,
+    flexWrap: width < 600 ? 'nowrap' : 'wrap',
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Welcome Message */}
@@ -46,12 +57,13 @@ const HomeScreen = () => {
               <TouchableOpacity>
                 <Text style={styles.Link}>₹ 0.0</Text>
               </TouchableOpacity>
-              <View style={styles.HistoryRow}>
-                <MaterialIcons name="history" size={28} color="#fff" />
-                <TouchableOpacity>
-                  <Text style={styles.Link}>History</Text>
-                </TouchableOpacity>
-              </View>
+            </View>
+
+            <View style={styles.HistoryRow}>
+              <MaterialIcons name="history" size={normalize(18)} color="#fff" />
+              <TouchableOpacity>
+                <Text style={styles.Link}>History</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <TouchableOpacity style={styles.walletBtn}>
@@ -62,7 +74,7 @@ const HomeScreen = () => {
 
       {/* Quick Actions */}
       <Text style={styles.sectionTitle}>Quick Actions</Text>
-      <View style={styles.quickActions}>
+      <View style={quickActionsStyle}>
         <ActionCard icon="call-outline" label="Recharge" />
         <ActionCard icon="card-outline" label="Pay EMI" />
         <ActionCard icon="wallet-outline" label="Wallet" />
@@ -106,6 +118,8 @@ const HomeScreen = () => {
         </View>
       </View>
 
+      {/* Optional Extra Content for Scroll Testing */}
+      <View style={{height: hp(12)}} />
       {/* Special Offers */}
       <View style={styles.section}>
         <View style={styles.header}>
@@ -134,7 +148,12 @@ const HomeScreen = () => {
 
 const ActionCard = ({icon, label}: {icon: string; label: string}) => (
   <TouchableOpacity style={styles.actionCard}>
-    <Ionicons name={icon} size={42} color="#3ED3A3" />
+    <Ionicons
+      name={icon}
+      size={normalize(32)}
+      color="#3ED3A3"
+      style={styles.icons}
+    />
     <Text style={styles.actionLabel}>{label}</Text>
   </TouchableOpacity>
 );
@@ -142,37 +161,42 @@ const ActionCard = ({icon, label}: {icon: string; label: string}) => (
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  icons: {
+    backgroundColor: '#183638',
+    padding: wp(2.5),
+    borderRadius: wp(13),
+  },
   container: {
     flex: 1,
     backgroundColor: '#0A0F24',
-    padding: 20,
+    padding: wp(5),
   },
   greeting: {
     color: '#FFFFFF',
-    fontSize: 32,
+    fontSize: normalize(32),
     fontWeight: 'bold',
   },
   subtext: {
     color: '#B0B0B0',
-    fontSize: 20,
-    marginBottom: 20,
+    fontSize: normalize(20),
+    marginBottom: hp(2.5),
   },
   walletCard: {
     backgroundColor: '#00C39A',
-    borderRadius: 15,
-    padding: 20,
-    marginBottom: 60,
-    marginTop: 20,
+    borderRadius: wp(4),
+    padding: wp(5),
+    marginBottom: hp(7),
+    marginTop: hp(2.5),
   },
   cardTitle: {
     color: '#E0FFF8',
-    fontSize: 18,
+    fontSize: normalize(18),
   },
   amount: {
     color: '#FFFFFF',
-    fontSize: 48,
+    fontSize: normalize(48),
     fontWeight: 'bold',
-    marginVertical: 5,
+    marginVertical: hp(0.6),
   },
   walletColumn: {
     flexDirection: 'column',
@@ -181,67 +205,68 @@ const styles = StyleSheet.create({
   walletRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 25,
-    gap: 15,
+    marginTop: hp(3),
+    gap: wp(3.5),
   },
   walletBottomRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 15,
+    gap: wp(3.5),
   },
   walletLabel: {
     color: 'rgba(255, 255, 255, 0.8)',
-    fontSize: 22,
+    fontSize: normalize(18),
   },
   Link: {
     color: '#FFFFFF',
-    fontSize: 24,
+    fontSize: normalize(18),
   },
   walletBtn: {
     alignSelf: 'center',
     backgroundColor: '#34D399',
     borderWidth: 2,
     borderColor: '#FFFFFF',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 6,
-    marginTop: 10,
+    paddingVertical: hp(1.8),
+    paddingHorizontal: wp(4),
+    borderRadius: wp(1.5),
+    marginTop: hp(1.2),
   },
   walletBtnText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: normalize(18),
     fontWeight: '600',
     textAlign: 'center',
   },
   HistoryRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 5,
+    gap: wp(1),
+    alignItems: 'center',
+    marginTop: hp(1.2),
   },
   sectionTitle: {
     color: '#FFFFFF',
-    fontSize: 24,
+    fontSize: normalize(24),
     fontWeight: '600',
-    marginBottom: 25,
+    marginBottom: hp(3),
   },
   quickActions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 30,
+    marginBottom: hp(3.7),
   },
   actionCard: {
     backgroundColor: '#10193A',
-    paddingVertical: 35,
-    paddingHorizontal: 20,
-    borderRadius: 12,
+    paddingVertical: hp(3),
+    paddingHorizontal: wp(5),
+    borderRadius: wp(3),
     alignItems: 'center',
     flex: 1,
-    marginHorizontal: 5,
+    marginHorizontal: wp(1.2),
   },
   actionLabel: {
     color: '#FFFFFF',
-    marginTop: 25,
-    fontSize: 18,
+    marginTop: hp(2),
+    fontSize: normalize(16),
   },
   currentPlans: {
     flexDirection: 'row',
@@ -250,7 +275,7 @@ const styles = StyleSheet.create({
   },
   viewAll: {
     color: '#3ED3A3',
-    fontSize: 14,
+    fontSize: normalize(14),
     fontWeight: '600',
   },
   section: {

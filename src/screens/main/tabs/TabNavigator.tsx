@@ -97,26 +97,62 @@ const TabNavigator = () => {
       <Tab.Screen
         name="Plans"
         component={PlansScreen}
-        options={{
-          headerTitle: 'Explore Plans',
-          headerLeft: PlansHeaderLeft,
-        }}
+        options={({ navigation }) => ({
+          headerTitle: 'Plans',
+          headerTitleStyle: {
+            color: '#fff',
+            fontWeight: '600',
+            fontSize: 25,
+          },
+          headerStyle: {
+            backgroundColor: '#202938',
+          },
+          tabBarStyle: {
+            backgroundColor: '#202938',
+          },
+          headerRight: () => <HomeHeaderRight navigation={navigation} />,
+          headerLeft: HomeHeaderLeft,
+        })}
       />
       <Tab.Screen
         name="Wallet"
         component={WalletScreen}
-        options={{
-          headerTitle: 'My Wallet',
-          headerRight: WalletHeaderRight,
-        }}
+        options={({ navigation }) => ({
+          headerTitle: 'Wallet',
+          headerTitleStyle: {
+            color: '#fff',
+            fontWeight: '600',
+            fontSize: 25,
+          },
+          headerStyle: {
+            backgroundColor: '#202938',
+          },
+          tabBarStyle: {
+            backgroundColor: '#202938',
+          },
+          headerRight: () => <HomeHeaderRight navigation={navigation} />,
+          headerLeft: HomeHeaderLeft,
+        })}
       />
       <Tab.Screen
         name="Settings"
         component={SettingScreen}
-        options={{
-          headerTitle: 'App Settings',
-          headerLeft: SettingsHeaderLeft,
-        }}
+        options={({ navigation }) => ({
+          headerTitle: 'Settings',
+          headerTitleStyle: {
+            color: '#fff',
+            fontWeight: '600',
+            fontSize: 25,
+          },
+          headerStyle: {
+            backgroundColor: '#202938',
+          },
+          tabBarStyle: {
+            backgroundColor: '#202938',
+          },
+          headerRight: () => <HomeHeaderRight navigation={navigation} />,
+          headerLeft: HomeHeaderLeft,
+        })}
       />
     </Tab.Navigator>
   );

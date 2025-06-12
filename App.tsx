@@ -14,6 +14,7 @@ import SplashScreen from './src/screens/SplashScreen';
 import RootNavigator from './src/navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+
 const { height } = Dimensions.get('window');
 
 export default function App() {
@@ -28,6 +29,13 @@ export default function App() {
 
   useEffect(() => {
     initializeAuth();
+    // if (Platform.OS === 'android' && changeNavigationBarColor) {
+    // try {
+    //   changeNavigationBarColor('#202938', false);
+    //   console.log('Navigation bar color set!');
+    // } catch (err) {
+    //   console.warn('Failed to set nav bar color', err);
+    // }
   }, [initializeAuth]);
 
   const handleSplashComplete = () => {

@@ -1,24 +1,36 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import HomeScreen from './Home';
 import WalletScreen from './Wallet';
 import PlansScreen from './Plans';
 import SettingScreen from './Settings';
+// import LogoWithCircles from '../../../components/atoms/LogoWithCircles';
 
 const Tab = createBottomTabNavigator();
 
 // Icon map
-const ICONS: Record<string, { active: string; inactive: string }> = {
-  Home: { active: 'home', inactive: 'home-outline' },
-  Wallet: { active: 'wallet', inactive: 'wallet-outline' },
-  Plans: { active: 'cellular', inactive: 'cellular-outline' },
-  Settings: { active: 'settings', inactive: 'settings-outline' },
+const ICONS: Record<string, {active: string; inactive: string}> = {
+  Home: {active: 'home', inactive: 'home-outline'},
+  Wallet: {active: 'wallet', inactive: 'wallet-outline'},
+  Plans: {active: 'cellular', inactive: 'cellular-outline'},
+  Settings: {active: 'settings', inactive: 'settings-outline'},
 };
 
 const HomeHeaderRight = () => (
+  <View style={styles.HomeHeader}>
+    <TouchableOpacity style={styles.Home}>
+      <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.Home}>
+      <Ionicons name="person-outline" size={24} color="#3ED3A3" />
+    </TouchableOpacity>
+  </View>
+);
+
+const HomeHeaderLeft = () => (
   <TouchableOpacity style={styles.Home}>
     <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
   </TouchableOpacity>
@@ -45,23 +57,34 @@ const SettingsHeaderLeft = () => (
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({route}) => ({
         headerShown: true,
         tabBarActiveTintColor: '#3ED3A3',
         tabBarInactiveTintColor: 'gray',
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({focused, color, size}) => {
           const icon = ICONS[route.name];
           const iconName = focused ? icon.active : icon.inactive;
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-      })}
-    >
+      })}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          headerTitle: 'Welcome Home',
+          headerTitle: 'YouPI',
+          headerTitleStyle: {
+            color: '#fff',
+            fontWeight: '600',
+            fontSize: 25,
+          },
+          headerStyle: {
+            backgroundColor: '#202938',
+          },
+          tabBarStyle: {
+            backgroundColor: '#202938',
+          },
           headerRight: HomeHeaderRight,
+          headerLeft: HomeHeaderLeft,
         }}
       />
       <Tab.Screen
@@ -95,8 +118,16 @@ const TabNavigator = () => {
 export default TabNavigator;
 
 const styles = StyleSheet.create({
+  HomeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+  },
   Home: {
     marginLeft: 15,
+    marginRight: 15,
+    borderColor: '#3ED3A3',
   },
   Plans: {
     marginLeft: 15,

@@ -23,6 +23,9 @@ export type TabStackParamList = {
 // -------- Main Stack --------
 export type MainStackParamList = {
   Tabs: NavigatorScreenParams<TabStackParamList>;
+  Profile: undefined;
+  Settings: undefined;
+  Plans: undefined;
 };
 
 // -------- Root Stack --------

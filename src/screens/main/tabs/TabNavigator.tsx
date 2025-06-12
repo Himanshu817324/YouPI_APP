@@ -19,12 +19,19 @@ const ICONS: Record<string, {active: string; inactive: string}> = {
   Settings: {active: 'settings', inactive: 'settings-outline'},
 };
 
-const HomeHeaderRight = () => (
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
+import type { ParamListBase } from '@react-navigation/native';
+
+type HomeHeaderRightProps = {
+  navigation: BottomTabNavigationProp<ParamListBase>;
+};
+
+const HomeHeaderRight = ({navigation}: HomeHeaderRightProps) => (
   <View style={styles.HomeHeader}>
     <TouchableOpacity style={styles.Home}>
       <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
     </TouchableOpacity>
-    <TouchableOpacity style={styles.Home}>
+    <TouchableOpacity onPress={() => {navigation.navigate('Profile')}} style={styles.Home}>
       <Ionicons name="person-outline" size={24} color="#3ED3A3" />
     </TouchableOpacity>
   </View>
@@ -70,7 +77,7 @@ const TabNavigator = () => {
       <Tab.Screen
         name="Home"
         component={HomeScreen}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: 'YouPI',
           headerTitleStyle: {
             color: '#fff',
@@ -83,9 +90,9 @@ const TabNavigator = () => {
           tabBarStyle: {
             backgroundColor: '#202938',
           },
-          headerRight: HomeHeaderRight,
+          headerRight: () => <HomeHeaderRight navigation={navigation} />,
           headerLeft: HomeHeaderLeft,
-        }}
+        })}
       />
       <Tab.Screen
         name="Plans"

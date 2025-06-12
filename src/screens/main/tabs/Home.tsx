@@ -1,16 +1,14 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Home Tab</Text>
-    </SafeAreaView>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Ionicons name="home-outline" size={40} color="blue" />
+      <Text>Home Tab</Text>
+    </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  text: { fontSize: 24 },
-});
+export default HomeScreen;

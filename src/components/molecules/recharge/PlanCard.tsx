@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-//   FlatList,
 } from 'react-native';
 
 interface Plan {
@@ -15,16 +14,32 @@ interface Plan {
   calls: string;
   sms: string;
   ott: string[];
-  color: string; // Use for background gradient or solid fallback
+  color: string;
   emi?: string;
 }
 
+const defaultPlan: Plan = {
+  name: 'Plan Unavailable',
+  price: 0,
+  validity: 'N/A',
+  data: 'N/A',
+  calls: 'N/A',
+  sms: 'N/A',
+  ott: [],
+  color: '#4276fa',
+};
+
 interface PlanCardProps {
-  plan: Plan;
+  plan?: Plan;
   planType: 'monthly' | '3-month';
 }
 
-const PlanCard: React.FC<PlanCardProps> = ({ plan, planType }) => {
+const PlanCard: React.FC<PlanCardProps> = ({ plan = defaultPlan, planType }) => {
+  // Early return if no plan is provided
+  if (!plan) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>
@@ -35,14 +50,14 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, planType }) => {
         {/* Decorative Circle */}
         <View style={styles.decorCircle} />
 
-        <View style={{ zIndex: 10 }}>
+        <View style={styles.contentContainer}>
           {/* Header Section */}
           <View style={styles.header}>
             <View>
               <Text style={styles.planName}>{plan.name}</Text>
               <Text style={styles.subText}>{plan.validity}</Text>
             </View>
-            <View style={{ alignItems: 'flex-end' }}>
+            <View style={styles.priceContainer}>
               <Text style={styles.price}>₹{plan.price}</Text>
               {plan.emi && <Text style={styles.subText}>({plan.emi})</Text>}
             </View>
@@ -65,7 +80,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, planType }) => {
           </View>
 
           {/* OTT Services */}
-          <View style={{ marginBottom: 12 }}>
+          <View style={styles.ottWrapper}>
             <View style={styles.ottTitleRow}>
               <Text style={styles.ottIcon}>▷</Text>
               <Text style={styles.ottLabel}>OTT Included:</Text>
@@ -162,6 +177,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginTop: 4,
   },
+  ottWrapper: {
+    marginBottom: 12,
+  },
   ottTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -220,6 +238,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
     fontSize: 16,
+  },
+  contentContainer: {
+    zIndex: 10,
+  },
+  priceContainer: {
+    alignItems: 'flex-end',
   },
 });
 

@@ -2,14 +2,16 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   Image,
   TouchableOpacity,
   ScrollView,
   Alert,
 } from 'react-native';
+import { useColorScheme } from 'nativewind';
 
 const ProfileScreen = () => {
+  const { colorScheme } = useColorScheme();
+
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
       { text: 'Cancel', style: 'cancel' },
@@ -18,34 +20,47 @@ const ProfileScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.profileHeader}>
+    <ScrollView className="flex-1 bg-[#e2f8f1] dark:bg-background-dark px-5">
+      {/* Profile Header */}
+      <View className="items-center mt-8 mb-5">
         <Image
-          source={{
-            uri: 'https://i.pravatar.cc/150?img=13',
-          }}
-          style={styles.avatar}
+          source={{ uri: 'https://i.pravatar.cc/150?img=13' }}
+          className="w-[90px] h-[90px] rounded-full mb-3"
         />
-        <Text style={styles.name}>John Doe</Text>
-        <Text style={styles.email}>john.doe@example.com</Text>
+        <Text className="text-lg font-semibold text-black dark:text-white">
+          John Doe
+        </Text>
+        <Text className="text-sm text-gray-500 dark:text-gray-400">
+          john.doe@example.com
+        </Text>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account Settings</Text>
+      {/* Account Settings */}
+      <View className="my-5">
+        <Text className="text-[#00D09C] text-base font-medium mb-2">
+          Account Settings
+        </Text>
         <ProfileItem label="Edit Profile" onPress={() => {}} />
         <ProfileItem label="Change Password" onPress={() => {}} />
         <ProfileItem label="Payment History" onPress={() => {}} />
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Support</Text>
+      {/* Support */}
+      <View className="my-5">
+        <Text className="text-[#00D09C] text-base font-medium mb-2">
+          Support
+        </Text>
         <ProfileItem label="Help Center" onPress={() => {}} />
         <ProfileItem label="Terms & Conditions" onPress={() => {}} />
         <ProfileItem label="Privacy Policy" onPress={() => {}} />
       </View>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Logout</Text>
+      {/* Logout */}
+      <TouchableOpacity
+        onPress={handleLogout}
+        className="my-8 items-center bg-red-600 py-3 rounded-lg"
+      >
+        <Text className="text-white font-semibold text-base">Logout</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -58,67 +73,12 @@ const ProfileItem = ({
   label: string;
   onPress: () => void;
 }) => (
-  <TouchableOpacity onPress={onPress} style={styles.profileItem}>
-    <Text style={styles.itemText}>{label}</Text>
+  <TouchableOpacity
+    onPress={onPress}
+    className="py-3 border-b border-[#2A2C38]"
+  >
+    <Text className="text-black dark:text-white text-[15px]">{label}</Text>
   </TouchableOpacity>
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#12141C',
-    paddingHorizontal: 20,
-  },
-  profileHeader: {
-    alignItems: 'center',
-    marginTop: 30,
-    marginBottom: 20,
-  },
-  avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    marginBottom: 12,
-  },
-  name: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: 'white',
-  },
-  email: {
-    fontSize: 14,
-    color: '#999',
-  },
-  section: {
-    marginVertical: 20,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    color: '#00D09C',
-    marginBottom: 10,
-    fontWeight: '500',
-  },
-  profileItem: {
-    paddingVertical: 12,
-    borderBottomColor: '#2A2C38',
-    borderBottomWidth: 1,
-  },
-  itemText: {
-    color: 'white',
-    fontSize: 15,
-  },
-  logoutButton: {
-    marginVertical: 30,
-    alignItems: 'center',
-    backgroundColor: '#FF3B30',
-    padding: 12,
-    borderRadius: 8,
-  },
-  logoutText: {
-    color: 'white',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-});
 
 export default ProfileScreen;

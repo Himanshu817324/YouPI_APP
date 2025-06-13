@@ -34,7 +34,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan = defaultPlan, planType }) => 
 
   return (
     <View className="mb-6">
-      <Text className="text-lg font-medium text-white mb-3">
+      <Text className="text-lg dark:text-background-light font-medium  mb-3">
         {planType === 'monthly' ? 'Monthly Plans' : '3-Month Plans'}
       </Text>
 

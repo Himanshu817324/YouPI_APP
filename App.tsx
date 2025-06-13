@@ -13,6 +13,8 @@ import SplashScreen from './src/screens/SplashScreen';
 import RootNavigator from './src/navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import './global.css';
+import './global.css';
+
 
 const { height } = Dimensions.get('window');
 

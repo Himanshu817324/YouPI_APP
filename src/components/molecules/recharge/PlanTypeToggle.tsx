@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Animated,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Animated } from 'react-native';
 
 interface PlanTypeToggleProps {
   planType: 'monthly' | '3-month';
@@ -17,21 +11,23 @@ const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
   setPlanType,
 }) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Select Plan Type</Text>
+    <View className="bg-slate-800 rounded-xl p-4 mb-5">
+      <Text className="text-white text-lg font-medium mb-3">
+        Select Plan Type
+      </Text>
 
-      <View style={styles.row}>
+      <View className="flex-row justify-between items-center">
         {/* Left Text Section */}
         <View>
-          <Text style={styles.optionTitle}>Monthly Plans</Text>
-          <Text style={styles.optionSubtitle}>Regular recharge plans</Text>
+          <Text className="text-white text-base font-medium">Monthly Plans</Text>
+          <Text className="text-slate-400 text-sm mt-1">Regular recharge plans</Text>
         </View>
 
         {/* Right Text + Toggle */}
-        <View style={styles.toggleContainer}>
-          <View style={{ alignItems: 'flex-end', marginRight: 8 }}>
-            <Text style={styles.optionTitle}>3-Month Plans</Text>
-            <Text style={styles.emiLabel}>EMI available</Text>
+        <View className="flex-row items-center">
+          <View className="items-end mr-2">
+            <Text className="text-white text-base font-medium">3-Month Plans</Text>
+            <Text className="text-emerald-400 text-sm font-medium mt-1">EMI available</Text>
           </View>
 
           <TouchableOpacity
@@ -39,19 +35,17 @@ const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
               setPlanType(planType === 'monthly' ? '3-month' : 'monthly')
             }
             activeOpacity={0.8}
-            style={styles.switchBase}
+            className="w-12 h-6 rounded-full bg-slate-600 justify-center"
           >
             <Animated.View
-              style={[
-                styles.switchThumb,
-                {
-                  transform: [
-                    {
-                      translateX: planType === '3-month' ? 24 : 4,
-                    },
-                  ],
-                },
-              ]}
+              className="absolute top-1 w-4 h-4 rounded-full bg-white"
+              style={{
+                transform: [
+                  {
+                    translateX: planType === '3-month' ? 24 : 4,
+                  },
+                ],
+              }}
             />
           </TouchableOpacity>
         </View>
@@ -59,60 +53,5 @@ const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#1e293b', // bg-slate-800
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#fff',
-    marginBottom: 12,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  optionTitle: {
-    fontWeight: '500',
-    fontSize: 16,
-    color: '#fff',
-  },
-  optionSubtitle: {
-    fontSize: 13,
-    color: '#94a3b8', // text-slate-400
-    marginTop: 2,
-  },
-  emiLabel: {
-    fontSize: 13,
-    color: '#34d399', // text-emerald-400
-    fontWeight: '500',
-    marginTop: 2,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  switchBase: {
-    width: 48,
-    height: 24,
-    borderRadius: 24,
-    backgroundColor: '#475569', // bg-slate-600
-    justifyContent: 'center',
-  },
-  switchThumb: {
-    position: 'absolute',
-    top: 4,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: '#fff',
-  },
-});
 
 export default PlanTypeToggle;

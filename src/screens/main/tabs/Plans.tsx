@@ -1,160 +1,195 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
   ScrollView,
   SafeAreaView,
+  Text,
+  TouchableOpacity,
 } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
 import PlanTypeToggle from '../../../components/molecules/recharge/PlanTypeToggle';
-import OperatorSelector from '../../../components/molecules/recharge/OperatorSelector';
 import PlanCard from '../../../components/molecules/recharge/PlanCard';
-import TabNavigator from '../tabs/TabNavigator';
-const PlansScreen = () => {
-  const [planType, setPlanType] = useState<'monthly' | '3-month'>('monthly');
-  const [selectedOperator, setSelectedOperator] = useState<'jio' | 'airtel' | 'vi'>('jio');
+import RechargeBox from '../../../components/molecules/recharge/RechargeBox';
 
-  const plans = {
-    monthly: {
-      jio: {
+const allPlans = {
+  Jio: {
+    monthly: [
+      {
         name: 'Jio Basic',
-        price: 239,
-        validity: '28 days',
-        data: '1.5GB/day',
-        calls: 'Unlimited calls',
-        sms: '100/day',
-        ott: ['JioCinema Premium'],
-        color: 'linear-gradient(135deg, #2563eb, #1e40af)',
-      },
-      airtel: {
-        name: 'Airtel Smart',
-        price: 299,
+        price: 349,
         validity: '28 days',
         data: '2GB/day',
-        calls: 'Unlimited calls',
+        calls: 'Unlimited',
         sms: '100/day',
-        ott: ['Disney+ Hotstar Mobile', 'Airtel Xstream'],
-        color: 'linear-gradient(135deg, #dc2626, #991b1b)',
+        ott: ['JioTV', 'JioCinema'],
+        color: '#4276fa',
       },
-      vi: {
-        name: 'Vi RedX',
-        price: 319,
+      {
+        name: 'Jio Premium',
+        price: 599,
         validity: '28 days',
-        data: '2.5GB/day',
-        calls: 'Unlimited calls',
+        data: '3GB/day',
+        calls: 'Unlimited',
         sms: '100/day',
-        ott: ['Vi Movies & TV'],
-        color: 'linear-gradient(135deg, #9333ea, #6b21a8)',
+        ott: ['JioTV', 'JioCinema', 'Disney+ Hotstar'],
+        color: '#e360e3',
       },
-    },
-    '3-month': {
-      jio: {
-        name: 'Jio 3-Month Value',
-        price: 719,
+    ],
+    '3-month': [
+      {
+        name: 'Jio Value',
+        price: 749,
         validity: '84 days',
         data: '2GB/day',
-        calls: 'Unlimited calls',
+        calls: 'Unlimited',
         sms: '100/day',
-        ott: ['JioCinema Premium', 'JioSaavn Pro'],
-        color: 'linear-gradient(135deg, #2563eb, #1e40af)',
-        emi: '₹240/month normally',
+        ott: ['JioTV', 'JioCinema'],
+        color: '#4276fa',
+        emi: '₹250/month',
       },
-      airtel: {
-        name: 'Airtel 3-Month Smart',
-        price: 839,
-        validity: '84 days',
-        data: '2GB/day',
-        calls: 'Unlimited calls',
-        sms: '100/day',
-        ott: ['Disney+ Hotstar Mobile', 'Airtel Xstream'],
-        color: 'linear-gradient(135deg, #dc2626, #991b1b)',
-        emi: '₹280/month normally',
-      },
-      vi: {
-        name: 'Vi 3-Month RedX',
-        price: 899,
+      {
+        name: 'Jio Premium Plus',
+        price: 999,
         validity: '84 days',
         data: '3GB/day',
-        calls: 'Unlimited calls',
+        calls: 'Unlimited',
         sms: '100/day',
-        ott: ['Vi Movies & TV', 'Netflix Mobile'],
-        color: 'linear-gradient(135deg, #9333ea, #6b21a8)',
-        emi: '₹300/month normally',
+        ott: ['JioTV', 'JioCinema', 'Disney+ Hotstar', 'Amazon Prime'],
+        color: '#e360e3',
+        emi: '₹333/month',
       },
-    },
-  };
+    ],
+  },
+  Airtel: {
+    monthly: [
+      {
+        name: 'Airtel Basic',
+        price: 359,
+        validity: '28 days',
+        data: '2GB/day',
+        calls: 'Unlimited',
+        sms: '100/day',
+        ott: ['Airtel Xstream'],
+        color: '#F44336',
+      },
+    ],
+    '3-month': [
+      {
+        name: 'Airtel Max',
+        price: 849,
+        validity: '84 days',
+        data: '2.5GB/day',
+        calls: 'Unlimited',
+        sms: '100/day',
+        ott: ['Amazon Prime'],
+        color: '#D32F2F',
+        emi: '₹283/month',
+      },
+    ],
+  },
+  Vi: {
+    monthly: [
+      {
+        name: 'Vi Value',
+        price: 299,
+        validity: '28 days',
+        data: '1.5GB/day',
+        calls: 'Unlimited',
+        sms: '100/day',
+        ott: ['Vi Movies & TV'],
+        color: '#9C27B0',
+      },
+    ],
+    '3-month': [
+      {
+        name: 'Vi Super',
+        price: 779,
+        validity: '84 days',
+        data: '2.5GB/day',
+        calls: 'Unlimited',
+        sms: '100/day',
+        ott: ['Vi Movies & TV', 'Disney+ Hotstar'],
+        color: '#7B1FA2',
+        emi: '₹260/month',
+      },
+    ],
+  },
+  BSNL: {
+    monthly: [
+      {
+        name: 'BSNL 429',
+        price: 429,
+        validity: '30 days',
+        data: '2GB/day',
+        calls: 'Unlimited',
+        sms: '100/day',
+        ott: [],
+        color: '#607D8B',
+      },
+    ],
+    '3-month': [
+      {
+        name: 'BSNL 997',
+        price: 997,
+        validity: '90 days',
+        data: '2GB/day',
+        calls: 'Unlimited',
+        sms: '100/day',
+        ott: [],
+        color: '#455A64',
+        emi: '₹332/month',
+      },
+    ],
+  },
+};
 
-  const currentPlan = plans[planType][selectedOperator];
+const operators = ['Jio', 'Airtel', 'Vi', 'BSNL'] as const;
+
+const PlansScreen = () => {
+  const [planType, setPlanType] = useState<'monthly' | '3-month'>('monthly');
+  const [selectedOperator, setSelectedOperator] =
+    useState<(typeof operators)[number]>('Jio');
+
+  const currentPlans = allPlans[selectedOperator][planType];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity style={styles.backBtn}>
-            <ArrowLeft color="#fff" size={20} />
-          </TouchableOpacity>
-          <Text style={styles.title}>Recharge</Text>
+    <SafeAreaView className="flex-1 bg-[#12141C]">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View className="p-4">
+
+           {/* Monthly / 3-Month Toggle */}
+          <PlanTypeToggle planType={planType} setPlanType={setPlanType} />
+
+
+          {/* Recharge Box */}
+          <RechargeBox />
+
+          {/* Operator Toggle */}
+          <View className="flex-row justify-between bg-[#1e1f25] p-1 rounded-lg mb-4">
+            {operators.map(op => (
+              <TouchableOpacity
+                key={op}
+                className={`flex-1 py-2 rounded-lg items-center ${
+                  selectedOperator === op ? 'bg-blue-600' : ''
+                }`}
+                onPress={() => setSelectedOperator(op)}>
+                <Text
+                  className={`font-medium ${
+                    selectedOperator === op ? 'text-white' : 'text-gray-300'
+                  }`}>
+                  {op}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* Plan Cards */}
+          {currentPlans.map((plan, index) => (
+            <PlanCard key={index} plan={plan} planType={planType} />
+          ))}
         </View>
-        <TouchableOpacity>
-          <Text style={styles.backText}>Back</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Content */}
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <PlanTypeToggle planType={planType} setPlanType={setPlanType} />
-        <OperatorSelector
-          selectedOperator={selectedOperator}
-          setSelectedOperator={setSelectedOperator}
-        />
-        <PlanCard plan={currentPlan} planType={planType} />
       </ScrollView>
-
-      <TabNavigator /> {/* Or use a placeholder View if not implemented */}
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#0f172a', // bg-slate-900
-  },
-  header: {
-    flexDirection: 'row',
-    backgroundColor: '#1e293b', // bg-slate-800
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: '#334155', // border-slate-700
-  },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  backBtn: {
-    padding: 8,
-    marginRight: 12,
-    backgroundColor: '#334155',
-    borderRadius: 8,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#fff',
-  },
-  backText: {
-    color: '#94a3b8',
-    fontSize: 14,
-  },
-  scrollContent: {
-    padding: 16,
-    paddingBottom: 100,
-  },
-});
 
 export default PlansScreen;

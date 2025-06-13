@@ -8,14 +8,36 @@ import {
   useWindowDimensions,
   ViewStyle,
 } from 'react-native';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {wp, hp, normalize} from '../../../utils/dimensions';
 
+interface OfferCardProps {
+  colors: string[];
+  title: string;
+  highlight: string;
+  description: string;
+}
+
+const OfferCard: React.FC<OfferCardProps> = ({
+  colors,
+  title,
+  highlight,
+  description,
+}) => (
+  <View style={[styles.offerCard, {backgroundColor: colors[0]}]}>
+    <Text style={styles.offerTitle}>{title}</Text>
+    <Text style={styles.offerHighlight}>{highlight}</Text>
+    <Text style={styles.offerDesc}>{description}</Text>
+    <TouchableOpacity style={styles.offerButton}>
+      <Text style={styles.offerButtonText}>View Details</Text>
+    </TouchableOpacity>
+  </View>
+);
+
 const HomeScreen = () => {
   const {width} = useWindowDimensions();
-
-  // Adjust layout based on screen width
   const quickActionsStyle: ViewStyle = {
     ...styles.quickActions,
     flexWrap: width < 600 ? 'nowrap' : 'wrap',
@@ -62,15 +84,70 @@ const HomeScreen = () => {
       </View>
 
       {/* Current Plans */}
-      <View style={styles.currentPlans}>
-        <Text style={styles.sectionTitle}>Current Plans</Text>
-        <TouchableOpacity>
-          <Text style={styles.viewAll}>View all →</Text>
-        </TouchableOpacity>
+      <View style={styles.section}>
+        <View style={styles.currentPlans}>
+          <Text style={styles.sectionTitle}>Current Plans</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewAll}>View all →</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.planCard}>
+          <View style={[styles.greenLeftBorder]} />
+          <View style={styles.planDetails}>
+            <View style={styles.planTopRow}>
+              <Text style={styles.planTitle}>Jio ₹349 Plan</Text>
+              <Text style={styles.planEmi}>EMI 1/3</Text>
+            </View>
+            <Text style={styles.planInfo}>2GB/day | Unlimited calls</Text>
+            <Text style={styles.planDate}>Exp: 20 Jun 2023</Text>
+            <View style={styles.planBottomRow}>
+              <Text style={styles.planPaid}>₹310 paid</Text>
+              <Text style={styles.planNext}>Next: ₹310 on 20 May</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.planCard}>
+          <View style={styles.planDetails}>
+            <View style={styles.planTopRow}>
+              <Text style={styles.planTitle}>Airtel ₹199 Plan</Text>
+              <Text style={styles.planEmi}>Fully paid</Text>
+            </View>
+            <Text style={styles.planInfo}>1GB/day | Unlimited calls</Text>
+            <Text style={styles.planDate}>Exp: 5 Jun 2023</Text>
+            <View style={styles.planBottomRow}>
+              <Text style={styles.planPaid}>₹199</Text>
+            </View>
+          </View>
+        </View>
       </View>
 
-      {/* Optional Extra Content for Scroll Testing */}
-      <View style={{height: hp(12)}} />
+      <View style={{height: hp(2)}} />
+      {/* Special Offers */}
+      <View style={styles.section}>
+        <View style={styles.header}>
+          <Text style={styles.sectionTitl}>Special Offers</Text>
+          <TouchableOpacity>
+            <Text style={styles.link}>View all →</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <OfferCard
+            colors={['#4276fa']}
+            title="Jio Special"
+            highlight="3 Months @ ₹900"
+            description="2GB/day | 84 days | Get cashback in wallet!"
+          />
+          <OfferCard
+            colors={['#e360e3']}
+            title="Airtel"
+            highlight="3 Months @ ₹1000"
+            description="1.5GB/day | 90 days | Free OTT access!"
+          />
+        </ScrollView>
+      </View>
     </ScrollView>
   );
 };
@@ -174,9 +251,9 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: '#FFFFFF',
-    fontSize: normalize(24),
+    fontSize: normalize(20),
     fontWeight: '600',
-    marginBottom: hp(3),
+    // marginBottom: hp(3),
   },
   quickActions: {
     flexDirection: 'row',
@@ -201,10 +278,135 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: hp(3),
+
   },
   viewAll: {
     color: '#3ED3A3',
-    fontSize: normalize(14),
+    fontSize: normalize(18),
+    fontWeight: '600',
+  },
+  section: {
+    marginBottom: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  sectionTitl: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  link: {
+    color: '#00ffcc',
+    fontSize: 14,
+  },
+  planCard: {
+    backgroundColor: '#1B2039',
+    borderRadius: 12,
+    marginBottom: 12,
+    flexDirection: 'row',
+    padding: 12,
+  },
+  greenLeftBorder: {
+    width: 4,
+    backgroundColor: '#00ffcc',
+    borderRadius: 4,
+    marginRight: 10,
+  },
+  planDetails: {
+    flex: 1,
+    paddingVertical: hp(2.3),
+    
+  },
+  planTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: hp(1),
+
+  },
+  planTitle: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  planEmi: {
+    color: 'gray',
+    fontSize: 20,
+  },
+  planInfo: {
+    color: '#bbb',
+    fontSize: 18,
+    marginTop: hp(0.5),
+  },
+  planDate: {
+    color: '#666',
+    fontSize: 16,
+    marginTop: hp(0.5),
+  },
+  planBottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 6,
+  },
+  planPaid: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  planNext: {
+    color: '#00ffcc',
+    fontSize: 13,
+  },
+  offerCard: {
+    width: 220,
+    borderRadius: 16,
+    padding: 16,
+    marginRight: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  offerTitle: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  offerHighlight: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '800',
+    marginVertical: 8,
+  },
+  offerDesc: {
+    color: 'white',
+    fontSize: 13,
+    marginBottom: 12,
+    opacity: 0.9,
+  },
+  offerButton: {
+    backgroundColor: 'white',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  offerButtonText: {
+    color: '#000',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  headerTitle: {
+    color: 'white',
+    fontSize: 24,
     fontWeight: '600',
   },
 });

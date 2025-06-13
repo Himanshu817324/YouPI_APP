@@ -7,9 +7,9 @@ type WalletCardProps = {
 };
 
 const WalletCard = ({ onPress }: WalletCardProps) => (
-  <View className="bg-[#3ED3A3] rounded-xl p-4 mb-5">
-    <Text className="text-white text-sm">Total Balance</Text>
-    <Text className="text-white text-3xl font-bold mt-1">₹ 0.00</Text>
+  <View className="bg-background-primary rounded-3xl p-4 mb-5">
+    <Text className="text-white text-3xl">Total Balance</Text>
+    <Text className="text-white text-5xl font-bold mt-1">₹ 0.00</Text>
 
     <View className="flex-row justify-between items-center mt-4">
       <View>

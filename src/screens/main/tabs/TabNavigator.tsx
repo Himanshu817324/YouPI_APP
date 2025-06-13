@@ -43,23 +43,23 @@ const HomeHeaderLeft = () => (
   </TouchableOpacity>
 );
 
-const PlansHeaderLeft = () => (
-  <View style={styles.Plans}>
-    <Ionicons name="list-outline" size={24} color="#3ED3A3" />
-  </View>
-);
+// const PlansHeaderLeft = () => (
+//   <View style={styles.Plans}>
+//     <Ionicons name="list-outline" size={24} color="#3ED3A3" />
+//   </View>
+// );
 
-const WalletHeaderRight = () => (
-  <TouchableOpacity style={styles.Wallet}>
-    <Ionicons name="add-circle-outline" size={24} color="#3ED3A3" />
-  </TouchableOpacity>
-);
+// const WalletHeaderRight = () => (
+//   <TouchableOpacity style={styles.Wallet}>
+//     <Ionicons name="add-circle-outline" size={24} color="#3ED3A3" />
+//   </TouchableOpacity>
+// );
 
-const SettingsHeaderLeft = () => (
-  <View style={styles.Settings}>
-    <Ionicons name="person-circle-outline" size={24} color="#3ED3A3" />
-  </View>
-);
+// const SettingsHeaderLeft = () => (
+//   <View style={styles.Settings}>
+//     <Ionicons name="person-circle-outline" size={24} color="#3ED3A3" />
+//   </View>
+// );
 
 const TabNavigator = () => {
   return (

@@ -4,7 +4,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // Base dimensions (you can adjust these based on your design)
 const baseWidth = 375;
-const baseHeight = 812;
+// const baseHeight = 812;
 
 export const wp = (widthPercent: number) => {
     const elemWidth = typeof widthPercent === 'number' ? widthPercent : parseFloat(widthPercent);

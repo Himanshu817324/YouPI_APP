@@ -19,7 +19,7 @@ const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
       <View className="flex-row justify-between items-center">
         {/* Left Text Section */}
         <View>
-          <Text className="text-white text-base font-medium">Monthly Plans</Text>
+          <Text className="dark:text-background-dark text-base font-medium">Monthly Plans</Text>
           <Text className="text-slate-400 text-sm mt-1">Regular recharge plans</Text>
         </View>
 

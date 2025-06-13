@@ -21,7 +21,7 @@ module.exports = {
         },
         subtitle: {
           light: '#111111',
-          dark: '#ffffff',
+          dark: '#000',
         },
         primary: '#00D09C',
       },

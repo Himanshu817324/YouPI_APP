@@ -1,35 +1,31 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 
-type CurrentPlansProps = {
-  onViewAll: () => void;
-};
+interface Plan {
+  title: string;
+  status: string;
+  details: string;
+  expiry: string;
+  paid: string;
+  next?: string;
+}
 
-const CurrentPlans = ({ onViewAll }: CurrentPlansProps) => (
-  <View className="mb-6">
-    <View className="flex-row justify-between items-center mb-2">
-      <Text className="text-lg font-semibold">Current Plans</Text>
-      <TouchableOpacity onPress={onViewAll}>
-        <Text className="text-emerald-500 font-medium">View all →</Text>
-      </TouchableOpacity>
-    </View>
-
-    <View className="bg-white rounded-xl p-4 shadow flex-row mb-3">
-      <View className="w-1 bg-emerald-500 rounded-full mr-4" />
-      <View className="flex-1">
-        <View className="flex-row justify-between">
-          <Text className="font-semibold text-gray-800">Jio ₹349 Plan</Text>
-          <Text className="text-sm text-gray-500">EMI 1/3</Text>
-        </View>
-        <Text className="text-gray-600 text-sm mt-1">2GB/day | Unlimited calls</Text>
-        <Text className="text-gray-400 text-xs mt-1">Exp: 20 Jun 2023</Text>
-        <View className="flex-row justify-between mt-2">
-          <Text className="text-sm text-emerald-600">₹310 paid</Text>
-          <Text className="text-sm text-gray-500">Next: ₹310 on 20 May</Text>
-        </View>
+const PlanCard = ({ plan }: { plan: Plan }) => (
+  <View className="bg-[#1B2039] rounded-xl flex-row p-3 mb-3">
+    <View className="w-1 bg-[#00ffcc] rounded mr-3" />
+    <View className="flex-1 py-4">
+      <View className="flex-row justify-between mb-2">
+        <Text className="text-white text-lg font-bold">{plan.title}</Text>
+        <Text className="text-gray-400 text-lg">{plan.status}</Text>
+      </View>
+      <Text className="text-gray-300 text-base">{plan.details}</Text>
+      <Text className="text-gray-500 text-sm">Exp: {plan.expiry}</Text>
+      <View className="flex-row justify-between mt-1">
+        <Text className="text-white text-base font-semibold">{plan.paid}</Text>
+        {plan.next && <Text className="text-[#00ffcc] text-sm">{plan.next}</Text>}
       </View>
     </View>
   </View>
 );
 
-export default CurrentPlans;
+export default PlanCard;

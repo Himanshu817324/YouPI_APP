@@ -1,6 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { wp, normalize } from '../../../utils/dimensions';
 
 type ActionCardProps = {
   icon: string;
@@ -8,11 +9,14 @@ type ActionCardProps = {
 };
 
 const ActionCard: React.FC<ActionCardProps> = ({ icon, label }) => (
-  <TouchableOpacity className="items-center flex-1 mx-2 py-6 rounded-2xl bg-slate-800 shadow-lg">
-    <View className="bg-[#183638] p-4 rounded-full mb-3">
-      <Ionicons name={icon} size={28} color="#fff" />
-    </View>
-    <Text className="text-white text-base font-semibold">{label}</Text>
+  <TouchableOpacity className="bg-[#10193A] py-3 px-5 rounded-xl items-center flex-1 mx-1">
+    <Ionicons
+      name={icon}
+      size={normalize(32)}
+      color="#3ED3A3"
+      style={{ backgroundColor: '#183638', padding: wp(2.5), borderRadius: wp(13) }}
+    />
+    <Text className="text-white mt-2 text-base">{label}</Text>
   </TouchableOpacity>
 );
 

@@ -152,7 +152,7 @@ const PlansScreen = () => {
   const currentPlans = allPlans[selectedOperator][planType];
 
   return (
-    <SafeAreaView className="flex-1 bg-[#12141C]">
+    <SafeAreaView className="flex-1 bg-background-light dark:bg-background-dark">
       <ScrollView showsVerticalScrollIndicator={false}>
         <View className="p-4">
 

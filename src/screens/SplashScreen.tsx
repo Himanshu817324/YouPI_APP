@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  View,
-  StyleSheet,
   Animated,
   Dimensions,
   Easing,
+  Image,
 } from 'react-native';
+import { View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const { width } = Dimensions.get('window');
@@ -18,6 +18,13 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const textColor = useRef(new Animated.Value(0)).current;
 
   const insets = useSafeAreaInsets();
+
+  const overlap = CIRCLE_SIZE * 0.25;
+  const totalSpacing = CIRCLE_SIZE - overlap;
+
+  const centerX = width / 2;
+  const blackCircleX = centerX - totalSpacing / 2 - CIRCLE_SIZE / 2;
+  const whiteCircleX = centerX + totalSpacing / 2 - CIRCLE_SIZE / 2;
 
   useEffect(() => {
     setTimeout(() => {
@@ -64,56 +71,73 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
     outputRange: ['#3ED3A3', '#ffffff'],
   });
 
-  const overlap = CIRCLE_SIZE * 0.25;
-  const totalSpacing = CIRCLE_SIZE - overlap;
-
-  const centerX = width / 2;
-  const blackCircleX = centerX - totalSpacing / 2 - CIRCLE_SIZE / 2;
-  const whiteCircleX = centerX + totalSpacing / 2 - CIRCLE_SIZE / 2;
-
   return (
     <Animated.View
-      style={[
-        styles.container,
-        { backgroundColor: bgInterpolate, paddingTop: insets.top + 300},
-      ]}
+      className="absolute inset-0 items-center"
+      style={{ backgroundColor: bgInterpolate, paddingTop: insets.top + 300 }}
     >
-      {/* Circles and Logo */}
-      <View style={styles.circleArea}>
-        <View style={[styles.circle, styles.blackCircle, { left: blackCircleX }]} />
+      {/* Circle Area */}
+      <View className="relative w-full mb-6" style={{ height: CIRCLE_SIZE }}>
+        <View
+          className="absolute rounded-full bg-black"
+          style={{
+            width: CIRCLE_SIZE,
+            height: CIRCLE_SIZE,
+            left: blackCircleX,
+          }}
+        />
         <Animated.View
-          style={[
-            styles.circle,
-            { left: whiteCircleX, backgroundColor: circleColor },
-          ]}
+          className="absolute rounded-full"
+          style={{
+            width: CIRCLE_SIZE,
+            height: CIRCLE_SIZE,
+            left: whiteCircleX,
+            backgroundColor: circleColor,
+          }}
         />
         <Animated.Image
           source={require('../assets/black_logo.png')}
-          style={[
-            styles.logo,
-            {
-              left: blackCircleX + (CIRCLE_SIZE - 80) / 2,
-              transform: [{ translateX: logoTranslateX }],
-            },
-          ]}
+          className="absolute w-20 h-20"
+          style={{
+            top: (CIRCLE_SIZE - 80) / 2,
+            left: blackCircleX + (CIRCLE_SIZE - 80) / 2,
+            transform: [{ translateX: logoTranslateX }],
+            resizeMode: 'contain',
+            zIndex: 2,
+          }}
         />
       </View>
 
-      {/* Animated Text */}
-      <Animated.Text style={[styles.title, { color: textInterpolate }]}>
+      {/* Title and Subtitle */}
+      <Animated.Text
+        className="text-3xl font-bold mt-2"
+        style={{ color: textInterpolate }}
+      >
         You PI
       </Animated.Text>
-      <Animated.Text style={[styles.subtitle, { color: textInterpolate }]}>
+      <Animated.Text
+        className="text-xs mt-1"
+        style={{ color: textInterpolate }}
+      >
         Your Best Money Transfer Partner
       </Animated.Text>
 
-      {/* Footer with safe area padding */}
-      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
-        <View style={styles.securedLine}>
-          <Animated.Text style={[styles.securedText, { color: textInterpolate }]}>
+      {/* Footer */}
+      <View
+        className="absolute bottom-10 w-full items-center"
+        style={{ paddingBottom: insets.bottom }}
+      >
+        <View className="flex-row items-center">
+          <Animated.Text
+            className="text-xs"
+            style={{ color: textInterpolate }}
+          >
             Secured by{' '}
           </Animated.Text>
-          <Animated.Text style={[styles.securedBrand, { color: textInterpolate }]}>
+          <Animated.Text
+            className="text-xs font-medium"
+            style={{ color: textInterpolate }}
+          >
             You PI.
           </Animated.Text>
         </View>
@@ -121,69 +145,5 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
     </Animated.View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    paddingTop: 240,
-  },
-  circleArea: {
-    position: 'relative',
-    width: '100%',
-    height: CIRCLE_SIZE,
-    marginBottom: 30,
-  },
-  circle: {
-    position: 'absolute',
-    width: CIRCLE_SIZE,
-    height: CIRCLE_SIZE,
-    borderRadius: CIRCLE_SIZE / 2,
-    backgroundColor: '#3ED3A3',
-  },
-  blackCircle: {
-    backgroundColor: '#000',
-  },
-  logo: {
-    position: 'absolute',
-    width: 80,
-    height: 80,
-    resizeMode: 'contain',
-    top: (CIRCLE_SIZE - 80) / 2,
-    zIndex: 2,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginTop: 10,
-  },
-  subtitle: {
-    fontSize: 13,
-    marginTop: 4,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 40,
-    width: '100%',
-    alignItems: 'center',
-  },
-  securedLine: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  securedText: {
-    fontSize: 12,
-  },
-  securedBrand: {
-    fontSize: 12,
-    fontWeight: '500',
-  },
-});
 
 export default SplashScreen;

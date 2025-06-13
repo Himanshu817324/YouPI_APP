@@ -8,16 +8,26 @@ import {
   useWindowDimensions,
   ViewStyle,
 } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
+import type { CompositeNavigationProp } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {wp, hp, normalize} from '../../../utils/dimensions';
+import { MainStackParamList, TabStackParamList } from '../../../types/navigation';
+
+type NavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList>,
+  NativeStackNavigationProp<MainStackParamList>
+>;
 
 interface OfferCardProps {
   colors: string[];
   title: string;
   highlight: string;
   description: string;
+  onPress: () => void;
 }
 
 const OfferCard: React.FC<OfferCardProps> = ({
@@ -25,18 +35,33 @@ const OfferCard: React.FC<OfferCardProps> = ({
   title,
   highlight,
   description,
+  onPress,
 }) => (
   <View style={[styles.offerCard, {backgroundColor: colors[0]}]}>
     <Text style={styles.offerTitle}>{title}</Text>
     <Text style={styles.offerHighlight}>{highlight}</Text>
     <Text style={styles.offerDesc}>{description}</Text>
-    <TouchableOpacity style={styles.offerButton}>
+    <TouchableOpacity onPress={onPress} style={styles.offerButton}>
       <Text style={styles.offerButtonText}>View Details</Text>
     </TouchableOpacity>
   </View>
 );
 
 const HomeScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
+
+  const handleWalletpress = () => {
+    navigation.navigate('Wallet');
+  };
+
+  const handleOfferPress = () => {
+    navigation.navigate('Plans');
+  };
+
+  const handleViewAllPress = () => {
+    navigation.navigate('Plans');
+  };
+
   const {width} = useWindowDimensions();
   const quickActionsStyle: ViewStyle = {
     ...styles.quickActions,
@@ -57,19 +82,19 @@ const HomeScreen = () => {
           <View style={styles.walletColumn}>
             <Text style={styles.walletLabel}>NBFC Wallet</Text>
             <View style={styles.walletBottomRow}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleWalletpress}>
                 <Text style={styles.Link}>₹ 0.0</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.HistoryRow}>
               <MaterialIcons name="history" size={normalize(18)} color="#fff" />
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleWalletpress}>
                 <Text style={styles.Link}>History</Text>
               </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity style={styles.walletBtn}>
+          <TouchableOpacity onPress={handleWalletpress} style={styles.walletBtn}>
             <Text style={styles.walletBtnText}>View Wallet</Text>
           </TouchableOpacity>
         </View>
@@ -87,7 +112,7 @@ const HomeScreen = () => {
       <View style={styles.section}>
         <View style={styles.currentPlans}>
           <Text style={styles.sectionTitle}>Current Plans</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleViewAllPress}> 
             <Text style={styles.viewAll}>View all →</Text>
           </TouchableOpacity>
         </View>
@@ -127,9 +152,9 @@ const HomeScreen = () => {
       {/* Special Offers */}
       <View style={styles.section}>
         <View style={styles.header}>
-          <Text style={styles.sectionTitl}>Special Offers</Text>
-          <TouchableOpacity>
-            <Text style={styles.link}>View all →</Text>
+          <Text style={styles.sectionTitle}>Special Offers</Text>
+          <TouchableOpacity onPress={handleViewAllPress}>
+            <Text style={styles.viewAll}>View all →</Text>
           </TouchableOpacity>
         </View>
 
@@ -139,12 +164,21 @@ const HomeScreen = () => {
             title="Jio Special"
             highlight="3 Months @ ₹900"
             description="2GB/day | 84 days | Get cashback in wallet!"
+            onPress={handleOfferPress}
           />
           <OfferCard
             colors={['#e360e3']}
             title="Airtel"
             highlight="3 Months @ ₹1000"
             description="1.5GB/day | 90 days | Free OTT access!"
+            onPress={handleOfferPress}
+          />
+          <OfferCard
+            colors={['#F87D13']}
+            title="Vi Special"
+            highlight="3 Months @ ₹749"
+            description="1.5GB/day | 84 days | Get cashback in wallet!"
+            onPress={handleOfferPress}
           />
         </ScrollView>
       </View>
@@ -287,18 +321,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   section: {
-    marginBottom: 20,
+    marginBottom: hp(4),
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: hp(3),
   },
   sectionTitl: {
-    color: 'white',
-    fontSize: 18,
+    color: '#FFFFFF',
+    fontSize: normalize(20),
     fontWeight: '600',
+    // marginBottom: hp(3),
   },
   link: {
     color: '#00ffcc',
@@ -320,7 +355,6 @@ const styles = StyleSheet.create({
   planDetails: {
     flex: 1,
     paddingVertical: hp(2.3),
-    
   },
   planTopRow: {
     flexDirection: 'row',
@@ -362,14 +396,16 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   offerCard: {
-    width: 220,
+    width: wp(75),
+    height: hp(24),
     borderRadius: 16,
     padding: 16,
-    marginRight: 12,
-    shadowColor: '#000',
+    marginRight: wp(4),
+    marginBottom: hp(2),
+    shadowColor: '#fff',
     shadowOffset: {
-      width: 0,
-      height: 2,
+      width: 14,
+      height: 10,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -377,36 +413,33 @@ const styles = StyleSheet.create({
   },
   offerTitle: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   offerHighlight: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 28,
     fontWeight: '800',
     marginVertical: 8,
   },
   offerDesc: {
     color: 'white',
-    fontSize: 13,
-    marginBottom: 12,
+    fontSize: 18,
+    marginBottom: hp(2.5),
     opacity: 0.9,
   },
   offerButton: {
     backgroundColor: 'white',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    bottom: 0,
+    paddingVertical: hp(1.2),
+    paddingHorizontal: wp(4),
     borderRadius: 8,
     alignItems: 'center',
   },
   offerButtonText: {
     color: '#000',
     fontWeight: '600',
-    fontSize: 14,
-  },
-  headerTitle: {
-    color: 'white',
-    fontSize: 24,
-    fontWeight: '600',
+    fontSize: 18,
   },
 });
+

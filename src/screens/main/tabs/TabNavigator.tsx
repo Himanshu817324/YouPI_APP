@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -21,6 +21,7 @@ const ICONS: Record<string, {active: string; inactive: string}> = {
 
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { ParamListBase } from '@react-navigation/native';
+import { wp,hp } from '../../../utils/dimensions';
 
 type HomeHeaderRightProps = {
   navigation: BottomTabNavigationProp<ParamListBase>;
@@ -28,10 +29,10 @@ type HomeHeaderRightProps = {
 
 const HomeHeaderRight = ({navigation}: HomeHeaderRightProps) => (
   <View style={styles.HomeHeader}>
-    <TouchableOpacity style={styles.Home}>
+    <TouchableOpacity style={styles.Notification}>
       <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
     </TouchableOpacity>
-    <TouchableOpacity onPress={() => {navigation.navigate('Profile')}} style={styles.Home}>
+    <TouchableOpacity onPress={() => {navigation.navigate('Profile')}} style={styles.Profile}>
       <Ionicons name="person-outline" size={24} color="#3ED3A3" />
     </TouchableOpacity>
   </View>
@@ -39,7 +40,7 @@ const HomeHeaderRight = ({navigation}: HomeHeaderRightProps) => (
 
 const HomeHeaderLeft = () => (
   <TouchableOpacity style={styles.Home}>
-    <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
+    <Image source={require('../../../assets/black_logo.png')} style={styles.Logo} />
   </TouchableOpacity>
 );
 
@@ -161,6 +162,12 @@ const TabNavigator = () => {
 export default TabNavigator;
 
 const styles = StyleSheet.create({
+  Logo: {
+    width: wp(10),
+    height:  hp(5),
+    // marginLeft: wp(-2),
+    // marginRight: wp(0),
+  },
   HomeHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -168,17 +175,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   Home: {
-    marginLeft: 15,
-    marginRight: 15,
+    marginLeft: wp(2),
+    marginRight: wp(2),
     borderColor: '#3ED3A3',
   },
-  Plans: {
-    marginLeft: 15,
+  Notification: {
+    marginLeft:wp(2),
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#3ED3A3',
+    borderRadius: 50,
+    backgroundColor: '#202938',
+    shadowColor: '#3ED3A3',
+    shadowOffset: {width: 10, height: 4},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  Wallet: {
-    marginLeft: 15,
-  },
-  Settings: {
-    marginLeft: 15,
+  Profile: {
+     marginLeft:wp(2),
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#3ED3A3',
+    borderRadius: 50,
+    backgroundColor: '#202938',
   },
 });

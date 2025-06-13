@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
 interface Plan {
   name: string;
@@ -35,59 +30,59 @@ interface PlanCardProps {
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({ plan = defaultPlan, planType }) => {
-  // Early return if no plan is provided
-  if (!plan) {
-    return null;
-  }
+  if (!plan) return null;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.sectionTitle}>
+    <View className="mb-6">
+      <Text className="text-lg font-medium text-white mb-3">
         {planType === 'monthly' ? 'Monthly Plans' : '3-Month Plans'}
       </Text>
 
-      <View style={[styles.card, { backgroundColor: plan.color }]}>
+      <View className="rounded-2xl p-5 relative overflow-hidden" style={{ backgroundColor: plan.color }}>
         {/* Decorative Circle */}
-        <View style={styles.decorCircle} />
+        <View className="absolute top-[-50px] right-[-50px] w-[120px] h-[120px] rounded-full bg-white/10 z-0" />
 
-        <View style={styles.contentContainer}>
-          {/* Header Section */}
-          <View style={styles.header}>
+        <View className="z-10">
+          {/* Header */}
+          <View className="flex-row justify-between mb-4">
             <View>
-              <Text style={styles.planName}>{plan.name}</Text>
-              <Text style={styles.subText}>{plan.validity}</Text>
+              <Text className="text-white font-bold text-xl">{plan.name}</Text>
+              <Text className="text-white/70 text-sm mt-1">{plan.validity}</Text>
             </View>
-            <View style={styles.priceContainer}>
-              <Text style={styles.price}>₹{plan.price}</Text>
-              {plan.emi && <Text style={styles.subText}>({plan.emi})</Text>}
-            </View>
-          </View>
-
-          {/* Details Grid */}
-          <View style={styles.grid}>
-            <View style={styles.gridItem}>
-              <Text style={styles.subText}>Data</Text>
-              <Text style={styles.gridValue}>{plan.data}</Text>
-            </View>
-            <View style={styles.gridItem}>
-              <Text style={styles.subText}>Calls</Text>
-              <Text style={styles.gridValue}>{plan.calls}</Text>
-            </View>
-            <View style={styles.gridItem}>
-              <Text style={styles.subText}>SMS</Text>
-              <Text style={styles.gridValue}>{plan.sms}</Text>
+            <View className="items-end">
+              <Text className="text-white text-2xl font-bold">₹{plan.price}</Text>
+              {plan.emi && <Text className="text-white/70 text-sm mt-1">({plan.emi})</Text>}
             </View>
           </View>
 
-          {/* OTT Services */}
-          <View style={styles.ottWrapper}>
-            <View style={styles.ottTitleRow}>
-              <Text style={styles.ottIcon}>▷</Text>
-              <Text style={styles.ottLabel}>OTT Included:</Text>
+          {/* Plan Grid */}
+          <View className="flex-row justify-between mb-4">
+            <View className="flex-1 bg-white/20 p-3 rounded-xl items-center mx-1">
+              <Text className="text-white/70 text-sm">Data</Text>
+              <Text className="text-white font-semibold text-sm mt-1">{plan.data}</Text>
             </View>
-            <View style={styles.ottContainer}>
-              {plan.ott.map((service, index) => (
-                <Text key={index} style={styles.ottBadge}>
+            <View className="flex-1 bg-white/20 p-3 rounded-xl items-center mx-1">
+              <Text className="text-white/70 text-sm">Calls</Text>
+              <Text className="text-white font-semibold text-sm mt-1">{plan.calls}</Text>
+            </View>
+            <View className="flex-1 bg-white/20 p-3 rounded-xl items-center mx-1">
+              <Text className="text-white/70 text-sm">SMS</Text>
+              <Text className="text-white font-semibold text-sm mt-1">{plan.sms}</Text>
+            </View>
+          </View>
+
+          {/* OTT Section */}
+          <View className="mb-3">
+            <View className="flex-row items-center mb-1">
+              <Text className="text-white/80 mr-2">▷</Text>
+              <Text className="text-white font-medium">OTT Included:</Text>
+            </View>
+            <View className="flex-row flex-wrap">
+              {plan.ott.map((service, idx) => (
+                <Text
+                  key={idx}
+                  className="bg-white/20 text-white px-3 py-1 rounded-full text-xs mr-2 mb-2"
+                >
                   {service}
                 </Text>
               ))}
@@ -96,155 +91,20 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan = defaultPlan, planType }) => 
 
           {/* EMI Note */}
           {planType === '3-month' && (
-            <View style={styles.emiBox}>
-              <Text style={styles.emiIcon}>💳</Text>
-              <Text style={styles.emiText}>EMI Available</Text>
+            <View className="bg-red-600/90 border border-red-600 rounded-lg p-3 mb-4 flex-row items-center gap-2">
+              <Text className="text-white text-base">💳</Text>
+              <Text className="text-white font-medium">EMI Available</Text>
             </View>
           )}
 
-          {/* Button */}
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Recharge Now</Text>
+          {/* Recharge Button */}
+          <TouchableOpacity className="bg-blue-600 py-3 rounded-lg items-center">
+            <Text className="text-white font-semibold text-base">Recharge Now</Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '500',
-    marginBottom: 12,
-    color: '#fff',
-  },
-  card: {
-    borderRadius: 16,
-    padding: 20,
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  decorCircle: {
-    position: 'absolute',
-    top: -50,
-    right: -50,
-    width: 120,
-    height: 120,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 60,
-    zIndex: 0,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  planName: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  subText: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 14,
-    marginTop: 4,
-  },
-  price: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  grid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  gridItem: {
-    flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    padding: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginHorizontal: 4,
-  },
-  gridValue: {
-    fontWeight: '600',
-    fontSize: 14,
-    color: '#fff',
-    marginTop: 4,
-  },
-  ottWrapper: {
-    marginBottom: 12,
-  },
-  ottTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 6,
-  },
-  ottIcon: {
-    color: 'rgba(255,255,255,0.8)',
-    marginRight: 6,
-  },
-  ottLabel: {
-    color: '#fff',
-    fontWeight: '500',
-  },
-  ottContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  ottBadge: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    color: '#fff',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    fontSize: 12,
-    marginRight: 8,
-    marginBottom: 6,
-  },
-  emiBox: {
-    backgroundColor: 'rgba(220, 38, 38, 0.9)', // red-600/90
-    borderWidth: 1,
-    borderColor: '#dc2626',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  emiIcon: {
-    color: '#fff',
-    fontSize: 16,
-    marginRight: 8,
-  },
-  emiText: {
-    color: '#fff',
-    fontWeight: '500',
-  },
-  button: {
-    backgroundColor: '#2563eb', // blue-600
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontWeight: '600',
-    color: '#fff',
-    fontSize: 16,
-  },
-  contentContainer: {
-    zIndex: 10,
-  },
-  priceContainer: {
-    alignItems: 'flex-end',
-  },
-});
 
 export default PlanCard;

@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  ScrollView,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import PlanTypeToggle from '../../../components/molecules/recharge/PlanTypeToggle';
 import PlanCard from '../../../components/molecules/recharge/PlanCard';
+import RechargeBox from '../../../components/molecules/recharge/RechargeBox';
 
 const allPlans = {
   Jio: {
@@ -139,35 +146,36 @@ const operators = ['Jio', 'Airtel', 'Vi', 'BSNL'] as const;
 
 const PlansScreen = () => {
   const [planType, setPlanType] = useState<'monthly' | '3-month'>('monthly');
-  const [selectedOperator, setSelectedOperator] = useState<typeof operators[number]>('Jio');
+  const [selectedOperator, setSelectedOperator] =
+    useState<(typeof operators)[number]>('Jio');
 
   const currentPlans = allPlans[selectedOperator][planType];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-[#12141C]">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.content}>
+        <View className="p-4">
 
-          {/* Monthly / 3-Month Toggle */}
+           {/* Monthly / 3-Month Toggle */}
           <PlanTypeToggle planType={planType} setPlanType={setPlanType} />
 
+
+          {/* Recharge Box */}
+          <RechargeBox />
+
           {/* Operator Toggle */}
-          <View style={styles.operatorToggle}>
-            {operators.map((op) => (
+          <View className="flex-row justify-between bg-[#1e1f25] p-1 rounded-lg mb-4">
+            {operators.map(op => (
               <TouchableOpacity
                 key={op}
-                style={[
-                  styles.operatorButton,
-                  selectedOperator === op && styles.activeOperatorButton,
-                ]}
-                onPress={() => setSelectedOperator(op)}
-              >
+                className={`flex-1 py-2 rounded-lg items-center ${
+                  selectedOperator === op ? 'bg-blue-600' : ''
+                }`}
+                onPress={() => setSelectedOperator(op)}>
                 <Text
-                  style={[
-                    styles.operatorText,
-                    selectedOperator === op && styles.activeOperatorText,
-                  ]}
-                >
+                  className={`font-medium ${
+                    selectedOperator === op ? 'text-white' : 'text-gray-300'
+                  }`}>
                   {op}
                 </Text>
               </TouchableOpacity>
@@ -183,39 +191,5 @@ const PlansScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#12141C',
-  },
-  content: {
-    padding: 16,
-  },
-  operatorToggle: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-    borderRadius: 10,
-    backgroundColor: '#1e1f25',
-    padding: 6,
-  },
-  operatorButton: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  activeOperatorButton: {
-    backgroundColor: '#2563eb',
-  },
-  operatorText: {
-    color: '#ccc',
-    fontWeight: '500',
-  },
-  activeOperatorText: {
-    color: '#fff',
-  },
-});
 
 export default PlansScreen;

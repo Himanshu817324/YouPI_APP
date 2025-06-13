@@ -8,11 +8,11 @@ import {
   View,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useAuthStore } from './src/store/authStore';
 import SplashScreen from './src/screens/SplashScreen';
 import RootNavigator from './src/navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import './global.css';
 import './global.css';
 
 
@@ -22,21 +22,10 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const slideAnim = useState(new Animated.Value(0))[0];
   const initializeAuth = useAuthStore(state => state.initializeAuth);
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const deviceColorScheme = useColorScheme();
 
   useEffect(() => {
     initializeAuth();
-    // if (Platform.OS === 'android' && changeNavigationBarColor) {
-    // try {
-    //   changeNavigationBarColor('#202938', false);
-    //   console.log('Navigation bar color set!');
-    // } catch (err) {
-    //   console.warn('Failed to set nav bar color', err);
-    // }
   }, [initializeAuth]);
 
   const handleSplashComplete = () => {
@@ -66,7 +55,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <View style={[styles.container, backgroundStyle]}>
+      <View className="flex-1 bg-white dark:bg-black">
         <NavigationContainer>
           <RootNavigator />
         </NavigationContainer>
@@ -74,9 +63,3 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

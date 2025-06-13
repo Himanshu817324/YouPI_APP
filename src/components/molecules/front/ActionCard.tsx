@@ -9,7 +9,7 @@ type ActionCardProps = {
 };
 
 const ActionCard: React.FC<ActionCardProps> = ({ icon, label }) => (
-  <TouchableOpacity className="bg-[#10193A] py-3 px-5 rounded-xl items-center flex-1 mx-1">
+  <TouchableOpacity className="bg-[#10193A] py-5 px-5 rounded-xl items-center flex-1 mx-1">
     <Ionicons
       name={icon}
       size={normalize(32)}

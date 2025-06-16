@@ -26,6 +26,7 @@ export type MainStackParamList = {
   Profile: undefined;
   Settings: undefined;
   Plans: undefined;
+  Notification: undefined;
 };
 
 // -------- Root Stack --------

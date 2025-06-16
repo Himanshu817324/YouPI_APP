@@ -22,7 +22,7 @@ const SettingScreen = () => {
   return (
     <ScrollView className="flex-1 bg-[#e2f8f1] dark:bg-background-dark px-5">
       <View className="my-5">
-        <Text className="text-[#00D09C] text-xl font-medium mb-2">
+        <Text className="text-[#00D09C] text-2xl font-medium mb-2">
           Preferences
         </Text>
 
@@ -45,7 +45,7 @@ const SettingScreen = () => {
       </View>
 
       <View className="my-5">
-        <Text className="text-[#00D09C] text-xl font-medium mb-2">App</Text>
+        <Text className="text-[#00D09C] text-2xl font-medium mb-2">App</Text>
         <SettingsItem label="About" onPress={() => {}} />
         <SettingsItem label="Send Feedback" onPress={() => {}} />
         <SettingsItem label="Rate the App" onPress={() => {}} />
@@ -69,7 +69,7 @@ const SettingsItem = ({
     className="py-[14px] border-b border-[#2A2C38] flex-row justify-between items-center"
     onPress={onPress}
     activeOpacity={onPress ? 0.7 : 1}>
-    <Text className="text-black dark:text-white text-[16px]">{label}</Text>
+    <Text className="text-black dark:text-white text-xl">{label}</Text>
     {right
       ? right
       : value && (

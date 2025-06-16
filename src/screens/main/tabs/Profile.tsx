@@ -7,56 +7,69 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation} from '@react-navigation/native';
 
 const ProfileScreen = () => {
+  const navigation = useNavigation();
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Logout', onPress: () => console.log('Logged out') },
+      {text: 'Cancel', style: 'cancel'},
+      {text: 'Logout', onPress: () => console.log('Logged out')},
     ]);
   };
 
   return (
-    <ScrollView className="flex-1 bg-[#e2f8f1] dark:bg-background-dark px-5">
-      <View className="items-center mt-8 mb-5">
-        <Image
-        // source={{ uri: 'https://www.google.com/imgres?q=profile&imgurl=https%3A%2F%2Fwww.upwork.com%2Fmc%2Fdocuments%2FAurelie-face.jpg&imgrefurl=https%3A%2F%2Fwww.upwork.com%2Fresources%2Fhow-to-guide-perfect-profile-picture&docid=_lgUfa9iUIcUwM&tbnid=OKp2L2VPgvWoPM&vet=12ahUKEwiLxu2cz_CNAxXgSmwGHSafKxIQM3oECGsQAA..i&w=400&h=400&hcb=2&itg=1&ved=2ahUKEwiLxu2cz_CNAxXgSmwGHSafKxIQM3oECGsQAA' }}
-          source={require('../../../assets/black_logo.png')}
-          className="w-[90px] h-[90px] rounded-full mb-3"
-        />
-        <Text className="text-3xl font-semibold text-black dark:text-white">
-          John Doe
+    <SafeAreaView className="flex-1 bg-[#e2f8f1] dark:bg-background-dark">
+      <View className="px-4 py-3 border-b border-[#00D09C] flex-row items-center justify-between">
+        <TouchableOpacity onPress={() => navigation.goBack()} className="p-2">
+          <Icon name="arrow-left" size={24} color="#00D09C" />
+        </TouchableOpacity>
+        <Text className=" dark:text-text-light text-2xl font-semibold flex-1 text-center mr-17">
+          Profile
         </Text>
-        <Text className="text-xl text-gray-500 dark:text-gray-400">
-          john.doe@example.com
-        </Text>
+        <View style={{width: 40}} />
       </View>
+      <ScrollView className='px-5 flex-1'>
+        <View className="items-center mt-8 mb-5">
+          <Image
+            source={require('../../../assets/profile-2.jpeg')}
+            className="w-[8rem] h-[8rem] border-2 border-[#00D09C] rounded-full mb-3"
+          />
+          <Text className="text-3xl font-semibold text-black dark:text-white">
+            John Doe
+          </Text>
+          <Text className="text-xl text-gray-500 dark:text-gray-400">
+            john.doe@example.com
+          </Text>
+        </View>
 
-      <View className="my-5">
-        <Text className="text-[#00D09C] text-2xl font-medium mb-2">
-          Account Settings
-        </Text>
-        <ProfileItem label="Edit Profile" onPress={() => {}} />
-        <ProfileItem label="Change Password" onPress={() => {}} />
-        <ProfileItem label="Payment History" onPress={() => {}} />
-      </View>
+        <View className="my-5">
+          <Text className="text-[#00D09C] text-2xl font-medium mb-2">
+            Account Settings
+          </Text>
+          <ProfileItem label="Edit Profile" onPress={() => {}} />
+          <ProfileItem label="Change Password" onPress={() => {}} />
+          <ProfileItem label="Payment History" onPress={() => {}} />
+        </View>
 
-      <View className="my-5">
-        <Text className="text-[#00D09C] text-2xl font-medium mb-2">
-          Support
-        </Text>
-        <ProfileItem label="Help Center" onPress={() => {}} />
-        <ProfileItem label="Terms & Conditions" onPress={() => {}} />
-        <ProfileItem label="Privacy Policy" onPress={() => {}} />
-      </View>
+        <View className="my-5">
+          <Text className="text-[#00D09C] text-2xl font-medium mb-2">
+            Support
+          </Text>
+          <ProfileItem label="Help Center" onPress={() => {}} />
+          <ProfileItem label="Terms & Conditions" onPress={() => {}} />
+          <ProfileItem label="Privacy Policy" onPress={() => {}} />
+        </View>
 
-      <TouchableOpacity
-        onPress={handleLogout}
-        className="my-8 items-center bg-red-600 py-3 rounded-lg"
-      >
-        <Text className="text-white font-semibold text-2xl">Logout</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity
+          onPress={handleLogout}
+          className="my-8 items-center bg-red-600 py-3 rounded-lg">
+          <Text className="text-white font-semibold text-2xl">Logout</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -69,8 +82,7 @@ const ProfileItem = ({
 }) => (
   <TouchableOpacity
     onPress={onPress}
-    className="py-3 border-b border-[#2A2C38]"
-  >
+    className="py-3 border-b border-[#2A2C38]">
     <Text className="text-black dark:text-white text-xl">{label}</Text>
   </TouchableOpacity>
 );

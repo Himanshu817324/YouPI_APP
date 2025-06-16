@@ -15,7 +15,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
       easing: Easing.inOut(Easing.ease),
       useNativeDriver: false,
     }).start(() => {
-      setTimeout(onComplete, 2000);
+      setTimeout(onComplete, 1000);
     });
   }, []);
 

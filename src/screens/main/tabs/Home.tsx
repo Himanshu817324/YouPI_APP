@@ -46,21 +46,21 @@ const HomeScreen = () => {
         </View>
         <PlanCard
           plan={{
-            title: "Jio ₹349 Plan",
-            status: "PIP 1/3",
-            details: "2GB/day | Unlimited calls",
-            expiry: "Exp: 20 Jun 2023",
-            paid: "₹310 paid",
-            next: "Next: ₹310 on 20 May"
+            title: 'Jio ₹349 Plan',
+            status: 'PIP 1/3',
+            details: '2GB/day | Unlimited calls',
+            expiry: 'Exp: 20 Jun 2023',
+            paid: '₹310 paid',
+            next: 'Next: ₹310 on 20 May'
           }}
         />
         <PlanCard
           plan={{
-            title: "Airtel ₹199 Plan",
-            status: "Fully paid",
-            details: "1GB/day | Unlimited calls",
-            expiry: "Exp: 5 Jun 2023",
-            paid: "₹199"
+            title: 'Airtel ₹199 Plan',
+            status: 'Fully paid',
+            details: '1GB/day | Unlimited calls',
+            expiry: 'Exp: 5 Jun 2023',
+            paid: '₹199'
           }}
         />
       </View>
@@ -74,21 +74,21 @@ const HomeScreen = () => {
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <OfferCard
-            colors={["#4276fa"]}
+            colors={['#4276fa']}
             title="Jio Special"
             highlight="3 Months @ ₹900"
             description="2GB/day | 84 days | Get cashback in wallet!"
             onPress={handleOfferPress}
           />
           <OfferCard
-            colors={["#e360e3"]}
+            colors={['#e360e3']}
             title="Airtel"
             highlight="3 Months @ ₹1000"
             description="1.5GB/day | 90 days | Free OTT access!"
             onPress={handleOfferPress}
           />
           <OfferCard
-            colors={["#F87D13"]}
+            colors={['#F87D13']}
             title="Vi Special"
             highlight="3 Months @ ₹749"
             description="1.5GB/day | 84 days | Get cashback in wallet!"

@@ -30,10 +30,10 @@ const Precheckout = () => {
   const plans = {
     normal: {
       name: 'Normal Plan',
-      price: '$29',
+      price: '₹349',
       period: '/month',
       description:
-        'Perfect for getting started with essential middleware features',
+        'Basic plan for individuals',
       features: [
         'Basic API Gateway',
         'Standard Security',
@@ -47,11 +47,11 @@ const Precheckout = () => {
     },
     smart: {
       name: 'Smart Saver',
-      price: '$19',
+      price: '₹295',
       period: '/month',
-      originalPrice: '$29',
+      originalPrice: '₹349',
       description:
-        'Advanced middleware with intelligent optimization and premium support',
+        'Advanced plan',
       features: [
         'Advanced API Gateway',
         'AI-Powered Security',

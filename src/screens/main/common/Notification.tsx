@@ -20,8 +20,7 @@ interface Notification {
 }
 
 const NotificationScreen = () => {
-  const navigation = useNavigation();
-  const [notifications, setNotifications] = React.useState<Notification[]>([
+  const [notifications, _setNotifications] = React.useState<Notification[]>([
     {
       id: '1',
       title: 'Recharge Successful!',
@@ -96,6 +95,7 @@ const NotificationScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 dark:bg-background-dark bg-background-light">
+<<<<<<< HEAD:src/screens/main/Notification.tsx
       <View className="px-4 py-3 border-b border-[#00D09C] flex-row items-center justify-between">
         <TouchableOpacity onPress={() => navigation.goBack()} className="p-2">
           <Icon name="arrow-left" size={24} color="#00D09C" />
@@ -105,6 +105,8 @@ const NotificationScreen = () => {
         </Text>
         <View style={{width: 40}} />
       </View>
+=======
+>>>>>>> refs/remotes/origin/main:src/screens/main/common/Notification.tsx
 
       <ScrollView className="flex-1 px-4">
         {notifications.length === 0 ? (

@@ -9,14 +9,14 @@ type ActionCardProps = {
 };
 
 const ActionCard: React.FC<ActionCardProps> = ({ icon, label }) => (
-  <TouchableOpacity className="bg-[#10193A] py-5 px-5 rounded-xl items-center flex-1 mx-1">
+  <TouchableOpacity className="bg-foreground-light dark:bg-foreground-dark py-5 px-5 rounded-xl items-center flex-1 mx-1 mt-6">
     <Ionicons
       name={icon}
-      size={normalize(32)}
+      size={normalize(36)}
       color="#3ED3A3"
       style={{ backgroundColor: '#183638', padding: wp(2.5), borderRadius: wp(13) }}
     />
-    <Text className="text-white mt-2 text-base">{label}</Text>
+    <Text className="text-text-light dark:text-text-dark mt-4 text-xl">{label}</Text>
   </TouchableOpacity>
 );
 

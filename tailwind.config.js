@@ -62,8 +62,8 @@ module.exports = {
           dark: '#111827', //0F172A  1F2937
         },
         foreground: {
-          light: '#1E293B',
-          dark: '#F8FAFC',
+          light: '#F8FAFC',
+          dark: '#1E293B',
         },
         card: {
           light: '#FFFFFF',

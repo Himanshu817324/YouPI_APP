@@ -24,6 +24,8 @@ export type TabStackParamList = {
 export type MainStackParamList = {
   Tabs: NavigatorScreenParams<TabStackParamList>;
   Profile: undefined;
+  Precheckout: undefined;
+  Checkout: undefined;
   Settings: undefined;
   Plans: undefined;
   Notification: undefined;

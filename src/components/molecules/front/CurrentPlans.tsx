@@ -11,7 +11,7 @@ interface Plan {
 }
 
 const PlanCard = ({ plan }: { plan: Plan }) => (
-  <View className="bg-[#1B2039] rounded-xl flex-row p-3 mb-3">
+  <View className="bg-[#1B2039] rounded-2xl flex-row p-3 mb-3">
     <View className="w-1 bg-[#00ffcc] rounded mr-3" />
     <View className="flex-1 py-4">
       <View className="flex-row justify-between mb-2">

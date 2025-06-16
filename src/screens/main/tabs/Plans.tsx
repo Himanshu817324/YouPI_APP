@@ -150,44 +150,44 @@ const PlansScreen = () => {
     useState<(typeof operators)[number]>('Jio');
 
   const currentPlans = allPlans[selectedOperator][planType];
-
   return (
     <SafeAreaView className="flex-1 bg-background-light dark:bg-background-dark">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="p-4">
+      <ScrollView
+        className="flex-1">
+          <View className="p-4">
+        {/* Monthly / 3-Month Toggle */}
+        <PlanTypeToggle planType={planType} setPlanType={setPlanType} />
 
-           {/* Monthly / 3-Month Toggle */}
-          <PlanTypeToggle planType={planType} setPlanType={setPlanType} />
+        {/* Recharge Box */}
+        <RechargeBox />
 
+        {/* Operator Toggle */}
+        <View className="flex-row justify-between bg-[#1e1f25] p-1 rounded-lg mb-4">
+          {operators.map(op => (
+            <TouchableOpacity
+              key={op}
+              className={`flex-1 py-2 rounded-lg items-center ${
+                selectedOperator === op ? 'bg-blue-600' : ''
+              }`}
+              onPress={() => setSelectedOperator(op)}>
+              <Text
+                className={`font-medium ${
+                  selectedOperator === op ? 'text-white' : 'text-gray-300'
+                }`}>
+                {op}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-          {/* Recharge Box */}
-          <RechargeBox />
-
-          {/* Operator Toggle */}
-          <View className="flex-row justify-between bg-[#1e1f25] p-1 rounded-lg mb-4">
-            {operators.map(op => (
-              <TouchableOpacity
-                key={op}
-                className={`flex-1 py-2 rounded-lg items-center ${
-                  selectedOperator === op ? 'bg-blue-600' : ''
-                }`}
-                onPress={() => setSelectedOperator(op)}>
-                <Text
-                  className={`font-medium ${
-                    selectedOperator === op ? 'text-white' : 'text-gray-300'
-                  }`}>
-                  {op}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-
-          {/* Plan Cards */}
+        {/* Plan Cards */}
+        <ScrollView showsVerticalScrollIndicator={false}>
           {currentPlans.map((plan, index) => (
             <PlanCard key={index} plan={plan} planType={planType} />
           ))}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
+        </ScrollView>
     </SafeAreaView>
   );
 };

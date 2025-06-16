@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 
 interface Plan {
   name: string;
@@ -30,17 +32,32 @@ interface PlanCardProps {
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({ plan = defaultPlan, planType }) => {
-  if (!plan) return null;
+  const navigation = useNavigation<StackNavigationProp<any>>(); // Update with your specific stack type
+
+  const handlePress = () => {
+    navigation.navigate('Precheckout', {
+      selectedPlan: planType,
+      planDetails: {
+        name: plan.name,
+        price: plan.price.toString(),
+        validity: plan.validity,
+        data: plan.data,
+        calls: plan.calls,
+        sms: plan.sms,
+        ott: plan.ott.join(', '),
+      },
+    });
+  };
 
   return (
     <View className="mb-6">
-      <Text className="text-lg dark:text-background-light font-medium  mb-3">
+      <Text className="text-lg dark:text-background-light font-medium mb-3">
         {planType === 'monthly' ? 'Monthly Plans' : '3-Month Plans'}
       </Text>
 
       <View className="rounded-2xl p-5 relative overflow-hidden" style={{ backgroundColor: plan.color }}>
         {/* Decorative Circle */}
-        <View className="absolute top-[-50px] right-[-50px] w-[120px] h-[120px] rounded-full bg-white/10 z-0" />
+        <View className="absolute -top-[50px] -right-[50px] w-[120px] h-[120px] rounded-full bg-white/10 z-0" />
 
         <View className="z-10">
           {/* Header */}
@@ -98,7 +115,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan = defaultPlan, planType }) => 
           )}
 
           {/* Recharge Button */}
-          <TouchableOpacity className="bg-blue-600 py-3 rounded-lg items-center">
+          <TouchableOpacity onPress={handlePress} className="bg-blue-600 py-3 rounded-lg items-center">
             <Text className="text-white font-semibold text-base">Recharge Now</Text>
           </TouchableOpacity>
         </View>

@@ -13,8 +13,13 @@ module.exports = {
         background: {
           light: '#e2f8f1',
           dark: '#12141C',
+          primary: '#00D09C',
         },
-        text: {
+        title: {
+          light: '#111111',
+          dark: '#ffffff',
+        },
+        subtitle: {
           light: '#111111',
           dark: '#000',
         },

@@ -1,9 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, View, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { wp, hp, normalize } from '../../../utils/dimensions';
 import type { CompositeNavigationProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
@@ -36,7 +33,7 @@ const HomeScreen = () => {
       <Text className="text-background-dark dark:text-background-light text-xl font-semibold">Quick Actions</Text>
       <View className={`flex-row justify-between mb-8 ${width < 600 ? '' : 'flex-wrap'}`}>
         <ActionCard icon="call-outline" label="Recharge" />
-        <ActionCard icon="card-outline" label="Pay EMI" />
+        <ActionCard icon="card-outline" label="Pay in Parts" />
         <ActionCard icon="wallet-outline" label="Wallet" />
       </View>
 
@@ -50,7 +47,7 @@ const HomeScreen = () => {
         <PlanCard
           plan={{
             title: "Jio ₹349 Plan",
-            status: "EMI 1/3",
+            status: "PIP 1/3",
             details: "2GB/day | Unlimited calls",
             expiry: "Exp: 20 Jun 2023",
             paid: "₹310 paid",

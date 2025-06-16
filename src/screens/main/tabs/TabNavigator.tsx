@@ -80,19 +80,25 @@ export default function TabNavigator() {
         })}
       />
       <Tab.Screen name="Plans" component={PlansScreen}
-        options={{
-          headerTitle: 'Plans',
-        }}
+        options={({ navigation }) => ({
+          headerTitle: 'Recharge Plans',
+          headerLeft: HomeHeaderLeft,
+          headerRight: () => <HomeHeaderRight navigation={navigation} />,
+        })}
       />
       <Tab.Screen name="Wallet" component={WalletScreen}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: 'Wallet',
-        }}
+          headerLeft: HomeHeaderLeft,
+          headerRight: () => <HomeHeaderRight navigation={navigation} />,
+        })}
       />
       <Tab.Screen name="Settings" component={SettingScreen}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: 'Settings',
-        }}
+          headerLeft: HomeHeaderLeft,
+          headerRight: () => <HomeHeaderRight navigation={navigation} />,
+        })}
       />
     </Tab.Navigator>
   );

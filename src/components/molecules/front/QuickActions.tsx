@@ -5,7 +5,7 @@ import ActionCard from './ActionCard';
 const QuickActions = () => (
   <View className="flex-row justify-between mb-6">
     <ActionCard icon="call-outline" label="Recharge" />
-    <ActionCard icon="card-outline" label="Pay EMI" />
+    <ActionCard icon="card-outline" label="Easy Pay" />
     <ActionCard icon="wallet-outline" label="Wallet" />
   </View>
 );

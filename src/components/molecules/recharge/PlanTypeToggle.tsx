@@ -27,7 +27,7 @@ const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
         <View className="flex-row items-center">
           <View className="items-end mr-2">
             <Text className="text-white text-base font-medium">3-Month Plans</Text>
-            <Text className="text-emerald-400 text-sm font-medium mt-1">EMI available</Text>
+            <Text className="text-emerald-400 text-sm font-medium mt-1">Pay in parts available</Text>
           </View>
 
           <TouchableOpacity

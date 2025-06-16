@@ -6,7 +6,6 @@ import TabNavigator from '../../screens/main/tabs/TabNavigator';
 import ProfileScreen from '../../screens/main/common/Profile';
 import Precheckout from '../../screens/main/common/Precheckout';
 import Checkout from '../../screens/main/common/Checkout';
-import ProfileScreen from '../../screens/main/tabs/Profile';
 import NotificationScreen from '../../screens/main/Notification';
 
 const Stack = createNativeStackNavigator<MainStackParamList>();

@@ -100,7 +100,7 @@ const NotificationScreen = () => {
         <TouchableOpacity onPress={() => navigation.goBack()} className="p-2">
           <Icon name="arrow-left" size={24} color="#00D09C" />
         </TouchableOpacity>
-        <Text className=" dark:text-text-light text-2xl font-semibold flex-1 text-center mr-10">
+        <Text className=" dark:text-text-light text-2xl font-semibold flex-1 text-center mr-18">
           Notifications
         </Text>
         <View style={{width: 40}} />

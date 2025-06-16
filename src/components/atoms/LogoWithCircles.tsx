@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Image, StyleSheet, Dimensions, StyleProp, ViewStyle } from 'react-native';
+import {
+  View,
+  Image,
+  Dimensions,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 
 const { width } = Dimensions.get('window');
 const DEFAULT_CIRCLE_SIZE = 140;
@@ -26,68 +32,48 @@ const LogoWithCircles: React.FC<LogoWithCirclesProps> = ({
   const logoTop = (circleSize - 80) / 2;
 
   return (
-    <View style={[styles.circleArea, containerStyle, { height: circleSize, top: -circleSize / 2 }]}>
+    <View
+      className="relative w-full -ml-5 mb-2"
+      style={[
+        containerStyle,
+        {
+          height: circleSize,
+          top: -circleSize / 2,
+        },
+      ]}
+    >
       <View
-        style={[
-          styles.circle,
-          styles.blackCircle,
-          {
-            left: blackCircleX,
-            width: circleSize,
-            height: circleSize,
-            borderRadius: circleSize / 2,
-          },
-        ]}
+        className="absolute"
+        style={{
+          left: blackCircleX,
+          width: circleSize,
+          height: circleSize,
+          borderRadius: circleSize / 2,
+          backgroundColor: CIRCLE_COLOR_LEFT,
+        }}
       />
       <View
-        style={[
-          styles.circle,
-          styles.greenCircle,
-          {
-            left: whiteCircleX,
-            width: circleSize,
-            height: circleSize,
-            borderRadius: circleSize / 2,
-          },
-        ]}
+        className="absolute"
+        style={{
+          left: whiteCircleX,
+          width: circleSize,
+          height: circleSize,
+          borderRadius: circleSize / 2,
+          backgroundColor: CIRCLE_COLOR_RIGHT,
+        }}
       />
       <Image
         source={LOGO_SOURCE}
-        style={[
-          styles.logo,
-          {
-            left: logoLeft,
-            top: logoTop,
-          },
-        ]}
+        className="absolute w-20 h-[85px]"
+        style={{
+          left: logoLeft,
+          top: logoTop,
+          resizeMode: 'contain',
+          zIndex: 2,
+        }}
       />
     </View>
   );
 };
 
 export default LogoWithCircles;
-
-const styles = StyleSheet.create({
-  circleArea: {
-    position: 'relative',
-    width: '100%',
-    marginBottom: 10,
-    marginLeft: -20,
-  },
-  circle: {
-    position: 'absolute',
-  },
-  blackCircle: {
-    backgroundColor: CIRCLE_COLOR_LEFT,
-  },
-  greenCircle: {
-    backgroundColor: CIRCLE_COLOR_RIGHT,
-  },
-  logo: {
-    position: 'absolute',
-    width: 80,
-    height: 85,
-    resizeMode: 'contain',
-    zIndex: 2,
-  },
-});

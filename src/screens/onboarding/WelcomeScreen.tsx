@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList} from '../../types/navigation';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import LogoWithCircles from '../../components/atoms/LogoWithCircles';
 import AppButton from '../../components/atoms/AppButton';
+import LogoWithCircles from '../../components/LogoWithCircles';
 
 type WelcomeScreenNavigationProp = StackNavigationProp<
   OnboardingStackParamList,
@@ -21,87 +21,40 @@ export default function WelcomeScreen({navigation}: Props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <LogoWithCircles circleSize={100} containerStyle={styles.logoContainer} />
+    <SafeAreaView className="flex-1 items-center bg-white pt-[250px]">
+      <LogoWithCircles animation={false} secondCircleColor="#3ED3A3" />
 
-      <Text style={styles.title}>Welcome to</Text>
-      <Text style={styles.subtitle}>Your Best Money Transfer Partner</Text>
+      <Text className="text-5xl font-bold text-black">Welcome to</Text>
+      <Text className="text-lg mt-1 text-black">
+        Your Best Money Transfer Partner
+      </Text>
 
-      <View style={styles.buttonContainer}>
+      <View className="absolute bottom-[100px] w-full items-center">
         <AppButton
           title="Get Started"
-          style={styles.loginButton}
+          style={{
+            paddingHorizontal: 60,
+            borderRadius: 19,
+            bottom: 30,
+            elevation: 25,
+            shadowColor: '#3ED3A3',
+            shadowOffset: {
+              width: 0,
+              height: 75,
+            },
+            shadowOpacity: 1,
+            shadowRadius: 400,
+          }}
           onPress={handleGetStarted}
         />
       </View>
 
-      <View style={styles.footer}>
-        <View style={styles.securedLine}>
-          <Text style={styles.securedText}>Secured by </Text>
-          <Text style={styles.securedBrand}>You PI.</Text>
+      <View className="absolute bottom-10 w-full items-center">
+        <View className="flex-row items-center">
+          <Text className="text-base">Secured by </Text>
+          <Text className="text-base font-medium">You PI.</Text>
         </View>
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingTop: 240,
-    backgroundColor: '#fff',
-  },
-  logoContainer: {
-    marginBottom: 30,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#000',
-  },
-  subtitle: {
-    fontSize: 13,
-    marginTop: 4,
-    color: '#000',
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 100,
-    alignItems: 'center',
-    width: '100%',
-  },
-  loginButton: {
-    paddingHorizontal: 60,
-    borderRadius: 19,
-    bottom: 30,
-    elevation: 25,
-    shadowColor: '#3ED3A3',
-    shadowOffset: {
-      width: 0,
-      height: 75,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 400,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 80,
-    width: '100%',
-    alignItems: 'center',
-  },
-  securedLine: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  securedText: {
-    fontSize: 12,
-    color: '#000',
-  },
-  securedBrand: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: '#3ED3A3',
-  },
-});

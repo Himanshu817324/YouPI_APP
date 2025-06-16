@@ -13,14 +13,14 @@ import SplashScreen from './src/screens/SplashScreen';
 import RootNavigator from './src/navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import './global.css';
-import './global.css';
-
+import Toast from 'react-native-toast-message';
 
 const { height } = Dimensions.get('window');
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const slideAnim = useState(new Animated.Value(0))[0];
+  const fadeAnim = useState(new Animated.Value(1))[0];
+  const scaleAnim = useState(new Animated.Value(1))[0];
   const initializeAuth = useAuthStore(state => state.initializeAuth);
   const deviceColorScheme = useColorScheme();
 
@@ -29,11 +29,18 @@ export default function App() {
   }, [initializeAuth]);
 
   const handleSplashComplete = () => {
-    Animated.timing(slideAnim, {
-      toValue: height,
-      duration: 500,
-      useNativeDriver: true,
-    }).start(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 0.95,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
       setIsLoading(false);
     });
   };
@@ -44,7 +51,11 @@ export default function App() {
         <Animated.View
           style={[
             StyleSheet.absoluteFillObject,
-            { transform: [{ translateY: slideAnim }] },
+            {
+              opacity: fadeAnim,
+              transform: [{ scale: scaleAnim }],
+              backgroundColor: deviceColorScheme === 'dark' ? '#000' : '#fff',
+            },
           ]}
         >
           <SplashScreen onComplete={handleSplashComplete} />
@@ -55,6 +66,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
+       <Toast />
       <View className="flex-1 bg-white dark:bg-black">
         <NavigationContainer>
           <RootNavigator />

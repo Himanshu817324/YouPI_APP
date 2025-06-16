@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
-  StyleSheet,
   Text,
   Image,
   Dimensions,
@@ -9,18 +8,15 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
-import {useAuthStore} from '../../store/authStore';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {OnboardingStackParamList} from '../../types/navigation';
+import { useAuthStore } from '../../store/authStore';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { OnboardingStackParamList } from '../../types/navigation';
 import AppButton from '../../components/atoms/AppButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-type Props = NativeStackScreenProps<
-  OnboardingStackParamList,
-  'OnboardingScreen'
->;
+type Props = NativeStackScreenProps<OnboardingStackParamList, 'OnboardingScreen'>;
 
 interface OnboardingItem {
   id: string;
@@ -33,22 +29,19 @@ const onboardingData: OnboardingItem[] = [
   {
     id: '1',
     title: 'Easy, Fast & Trusted',
-    description:
-      'Fast money transfer and guaranteed safe transactions with You PI.',
+    description: 'Fast money transfer and guaranteed safe transactions with You PI.',
     image: require('../../assets/onboarding.png'),
   },
   {
     id: '2',
     title: 'Saving with You PI',
-    description:
-      'Track the progress of your savings and start a habit of saving with You PI.',
+    description: 'Track the progress of your savings and start a habit of saving with You PI.',
     image: require('../../assets/onboarding2.png'),
   },
   {
     id: '3',
     title: 'Free You PI Transactions',
-    description:
-      'Provides the quality of the financial system with free money transactions without any fees.',
+    description: 'Provides the quality of the financial system with free money transactions without any fees.',
     image: require('../../assets/onboarding3.png'),
   },
   {
@@ -62,31 +55,31 @@ const onboardingData: OnboardingItem[] = [
 export default function OnboardingScreen({}: Props) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const renderItem = ({item}: {item: OnboardingItem}) => {
-    const highlightText = (text: string, style: any) => {
+  const renderItem = ({ item }: { item: OnboardingItem }) => {
+    const highlightText = (text: string, baseStyle: string) => {
       const parts = text.split(/(YouPI|You PI)/);
       return (
-        <Text style={style}>
+        <Text className={baseStyle}>
           {parts.map((part, index) =>
             part === 'YouPI' || part === 'You PI' ? (
-              <Text key={index} style={[style, {color: '#3ED3A3'}]}>
+              <Text key={index} className={`${baseStyle} text-[#3ED3A3]`}>
                 {part}
               </Text>
             ) : (
               part
-            ),
+            )
           )}
         </Text>
       );
     };
 
     return (
-      <View style={styles.slide}>
-        <Image source={item.image} style={styles.image} />
-        <View style={styles.titleContainer}>
-          {highlightText(item.title, styles.title)}
+      <View className="w-full items-center px-5" style={{ width }}>
+        <Image source={item.image} className="w-5/5 h-3/5 my-1" resizeMode="contain" />
+        <View className="flex-row flex-wrap justify-center items-center mb-2">
+          {highlightText(item.title, 'text-3xl font-bold text-center text-black')}
         </View>
-        {highlightText(item.description, styles.description)}
+        {highlightText(item.description, 'text-xl text-center text-gray-500 px-5 leading-8')}
       </View>
     );
   };
@@ -106,7 +99,7 @@ export default function OnboardingScreen({}: Props) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView className="flex-1 bg-white">
       <FlatList
         data={onboardingData}
         renderItem={renderItem}
@@ -115,93 +108,39 @@ export default function OnboardingScreen({}: Props) {
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
       />
 
-      <View style={styles.footer}>
-        <View style={styles.pagination}>
+      <View className="absolute bottom-[50px] left-0 right-0 items-center">
+        <View className="flex-row mb-5">
           {onboardingData.map((_, index) => (
             <View
               key={index}
-              style={[
-                styles.paginationDot,
-                index === currentSlide && styles.paginationDotActive,
-              ]}
+              className={`h-2 rounded-full mx-1 ${
+                index === currentSlide ? 'w-5 bg-[#3ED3A3]' : 'w-2 bg-gray-300'
+              }`}
             />
           ))}
         </View>
 
-        {/* ✅ Use AppButton instead of TouchableOpacity */}
         <AppButton
           title="Login"
-          style={styles.loginButton}
+          style={{
+            paddingHorizontal: 60,
+            borderRadius: 19,
+            bottom: 30,
+            elevation: 25,
+            shadowColor: '#3ED3A3',
+            shadowOffset: {
+              width: 0,
+              height: 75,
+            },
+            shadowOpacity: 1,
+            shadowRadius: 400,
+          }}
           onPress={handleLogin}
         />
       </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
-  slide: {width, alignItems: 'center', padding: 20},
-  image: {
-    width: width * 0.8,
-    height: width * 0.8,
-    resizeMode: 'contain',
-    marginVertical: 40,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#000',
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  description: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    paddingHorizontal: 20,
-    lineHeight: 34,
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 50,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  loginButton: {
-    paddingHorizontal: 60,
-    borderRadius: 19,
-    bottom: 30,
-    elevation: 25,
-    shadowColor: '#3ED3A3',
-    shadowOffset: {
-      width: 0,
-      height: 75,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 400,
-  },
-  pagination: {flexDirection: 'row', marginBottom: 20},
-  paginationDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#ccc',
-    marginHorizontal: 5,
-  },
-  paginationDotActive: {
-    backgroundColor: '#3ED3A3',
-    width: 20,
-  },
-});

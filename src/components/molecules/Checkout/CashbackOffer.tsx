@@ -5,7 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const CashbackOffer: React.FC = () => {
   return (
-    <View className="relative p-6 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-900/40 via-emerald-800/40 to-teal-800/40 overflow-hidden shadow-xl">
+    <View className="relative p-6 rounded-2xl border bg-teal-900 border-emerald-500/30 bg-gradient-to-r from-emerald-900/40 via-emerald-800/40 to-teal-800/40 overflow-hidden shadow-xl">
 
       {/* Background gradients */}
       <View className="absolute inset-0 bg-gradient-to-r from-emerald-400/10 to-teal-400/10 animate-pulse" />
@@ -20,9 +20,9 @@ const CashbackOffer: React.FC = () => {
         <View className="flex-1">
           <View className="flex-row items-center space-x-2 mb-1">
             <Text className="font-bold text-emerald-300 text-lg">Get $5 Cashback!</Text>
-            <FontAwesome5 name="sparkles" size={16} color="#facc15" />
+            <FontAwesome5 name="sparkles" size={16} color="#00D09C" />
           </View>
-          <Text className="text-sm text-emerald-200/80">
+          <Text className="text-sm text-text-dark dark:text-text-dark">
             Automatically credited to your wallet after payment
           </Text>
         </View>

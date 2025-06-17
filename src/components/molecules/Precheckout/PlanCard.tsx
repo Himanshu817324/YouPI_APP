@@ -101,7 +101,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
       {/* Buy Now Button */}
       <TouchableOpacity
         onPress={() => onBuyNow(planKey)}
-        className="w-full mt-4 py-3 rounded-xl flex-row justify-center items-center bg-primary-light dark:bg-primary-dark">
+        className="w-full mt-4 py-3 rounded-xl flex-row justify-center items-center bg-[#00D09C] dark:bg-primary-dark">
         <Text className="font-semibold text-base text-primary-foreground-light dark:text-primary-foreground-dark">
           Buy Now
         </Text>

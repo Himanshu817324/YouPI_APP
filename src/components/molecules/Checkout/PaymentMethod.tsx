@@ -75,7 +75,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ selectedPayment, onPaymen
                   </View>
                 </View>
 
-                <View className={`w-6 h-6 rounded-full border-2 ${isSelected ? 'border-white bg-white' : 'border-slate-400'}`}>
+                <View className={` rounded-full border-2 ${isSelected ? 'border-white bg-white' : 'border-slate-400'}`}>
                   {isSelected && (
                     <Ionicons name="checkmark-circle" size={24} color="#10B981" />
                   )}

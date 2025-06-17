@@ -11,22 +11,20 @@ const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
   setPlanType,
 }) => {
   return (
-    <View className="bg-foreground-dark dark:bg-background-light rounded-2xl p-4 mb-5">
-      <Text className="text-light text-lg font-medium mb-3">
+    <View className="bg-foreground-light dark:bg-foreground-dark rounded-2xl p-4 mb-5">
+      <Text className="text-text-light dark:text-text-dark text-lg font-medium mb-3">
         Select Plan Type
       </Text>
 
       <View className="flex-row justify-between items-center">
-        {/* Left Text Section */}
         <View>
-          <Text className="dark:text-background-dark text-base font-medium">Monthly Plans</Text>
+          <Text className="text-text-light dark:text-text-dark text-base font-medium">Monthly Plans</Text>
           <Text className="text-slate-400 text-sm mt-1">Regular recharge plans</Text>
         </View>
 
-        {/* Right Text + Toggle */}
         <View className="flex-row items-center">
           <View className="items-end mr-2">
-            <Text className="text-white text-base font-medium">3-Month Plans</Text>
+            <Text className="text-text-light dark:text-text-dark text-base font-medium">3-Month Plans</Text>
             <Text className="text-emerald-400 text-sm font-medium mt-1">Smart Saver available</Text>
           </View>
 

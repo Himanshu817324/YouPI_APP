@@ -29,7 +29,7 @@ const PlanCard: React.FC<PlanCardProps> = ({
 }) => {
   return (
     <View
-      className={`relative rounded-2xl border-2 transition-all p-6 mb-6 ${
+      className={`relative rounded-2xl border-2 border-[#00D09C] transition-all p-6 mb-6 ${
         isActive ? 'scale-105 shadow-2xl' : 'opacity-50 scale-95'
       }`}
       style={{
@@ -50,10 +50,10 @@ const PlanCard: React.FC<PlanCardProps> = ({
       {/* Header with Icon */}
       <View className="flex-row items-center mb-4">
         <View className="p-3 rounded-full bg-card-light dark:bg-card-dark">
-          <Ionicons name={plan.icon} size={28} color="#4B5563" />
+          <Ionicons name={plan.icon} size={28} color="#00D09C" />
         </View>
         <View className="ml-4">
-          <Text className="text-xl font-bold text-title-light dark:text-title-dark">
+          <Text className="text-xl font-bold text-text-light dark:text-text-dark">
             {plan.name}
           </Text>
           {plan.originalPrice && (
@@ -67,14 +67,14 @@ const PlanCard: React.FC<PlanCardProps> = ({
       {/* Price and Description */}
       <View className="mb-6">
         <View className="flex-row items-baseline">
-          <Text className="text-3xl font-bold text-title-light dark:text-title-dark">
+          <Text className="text-3xl font-bold text-text-light dark:text-text-dark">
             {plan.price}
           </Text>
-          <Text className="ml-2 text-base text-subtitle-light dark:text-subtitle-dark">
+          <Text className="ml-2 text-base text-text-light dark:text-text-dark">
             {plan.period}
           </Text>
         </View>
-        <Text className="mt-3 text-sm text-subtitle-light dark:text-subtitle-dark">
+        <Text className="mt-3 text-sm text-text-light dark:text-text-dark">
           {plan.description}
         </Text>
       </View>

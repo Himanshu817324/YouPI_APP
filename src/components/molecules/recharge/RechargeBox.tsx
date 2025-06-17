@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
 const RechargeBox = () => {
   return (
-    <View className="bg-slate-800 rounded-2xl p-4 mb-6">
+    <View className="bg-background-gray dark:bg-foreground-dark rounded-xl p-4 mb-6">
       {/* Phone Number */}
       <TextInput
         placeholder="Phone Number"

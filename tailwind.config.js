@@ -58,8 +58,9 @@ module.exports = {
           dark: '#9CA3AF',
         },
         background: {
-          light: '#e2f8f1', //F9FAFB
-          dark: '#111827', //0F172A  1F2937
+          light: '#e2f8f1',
+          dark: '#111827',
+          gray: '#f2f2f2',
         },
         foreground: {
           light: '#F8FAFC',

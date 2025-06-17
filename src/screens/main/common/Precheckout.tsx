@@ -2,13 +2,10 @@ import React, {useState} from 'react';
 import {View, ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
-// import Ionicons from 'react-native-vector-icons/Ionicons';
 import MiddlewareHeader from '../../../components/molecules/Precheckout/MiddlewareHeader';
 import PreCheckoutNavigator from '../../../components/molecules/Precheckout/PreCheckoutNavigator';
 import PlanCard from '../../../components/molecules/Precheckout/PlanCard';
-import ComparisonTable from '../../../components/molecules/Precheckout/ComparisionTable';
 import {SafeAreaView} from 'react-native-safe-area-context';
-// FIX: Update the path below if the file exists elsewhere, or create the file if missing.
 
 type PrecheckoutStackParamList = {
   Checkout: {
@@ -16,10 +13,8 @@ type PrecheckoutStackParamList = {
     planDetails: {
       name: string;
       price: string;
-      // add other properties if needed
     };
   };
-  // add other screens if needed
 };
 
 const Precheckout = () => {
@@ -93,7 +88,6 @@ const Precheckout = () => {
           />
         </View>
 
-        <ComparisonTable activeTab={activeTab} />
       </ScrollView>
     </SafeAreaView>
   );

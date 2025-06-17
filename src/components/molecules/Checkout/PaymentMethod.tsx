@@ -41,7 +41,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ selectedPayment, onPaymen
 
   return (
     <View className="space-y-4">
-      <Text className="text-lg font-semibold text-slate-200 mb-4">Choose Payment Method</Text>
+      <Text className="text-lg font-semibold text-text-light dark:text-text-dark mb-4">Choose Payment Method</Text>
 
       {paymentMethods.map((method, index) => {
         const isSelected = selectedPayment === method.id;
@@ -53,10 +53,10 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ selectedPayment, onPaymen
           >
             <TouchableOpacity
               className={`
-                relative p-5 rounded-2xl border transition-all duration-300
+                relative p-5 mb-4 rounded-2xl border transition-all duration-300
                 ${isSelected
                   ? 'bg-emerald-800/20 border-emerald-500 shadow-lg'
-                  : 'bg-slate-800/50 border-slate-600/50 active:bg-slate-700/50'
+                  : 'dark:bg-slate-800/50 bg-teal-500 border-slate-600/50 active:bg-slate-700/50'
                 }
               `}
               onPress={() => onPaymentSelect(method.id)}
@@ -64,7 +64,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ selectedPayment, onPaymen
             >
               <View className="flex-row justify-between items-center">
                 <View className="flex-row items-center space-x-4">
-                  <View className={`p-3 rounded-xl shadow-lg ${isSelected ? 'bg-emerald-600' : 'bg-slate-700'}`}>
+                  <View className={`p-3 rounded-xl mr-4 shadow-lg ${isSelected ? 'bg-emerald-600' : 'bg-slate-700'}`}>
                     <Ionicons name={method.icon as any} size={24} color="#fff" />
                   </View>
                   <View>
@@ -84,7 +84,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({ selectedPayment, onPaymen
 
               {method.id === 'wallet' && method.status && (
                 <View className="flex-row items-center mt-3 space-x-2">
-                  <View className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
+                  <View className="w-2 h-2 bg-orange-400 mr-3 rounded-full animate-pulse" />
                   <Text className="text-sm text-slate-300">{method.status}</Text>
                 </View>
               )}

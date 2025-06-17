@@ -162,7 +162,7 @@ const PlansScreen = () => {
         <RechargeBox />
 
         {/* Operator Toggle */}
-        <View className="flex-row justify-between bg-[#1e1f25] p-1 rounded-lg mb-4">
+        <View className="flex-row justify-between bg-foreground-light dark:bg-foreground-dark p-1 rounded-lg mb-4">
           {operators.map(op => (
             <TouchableOpacity
               key={op}
@@ -172,7 +172,7 @@ const PlansScreen = () => {
               onPress={() => setSelectedOperator(op)}>
               <Text
                 className={`font-medium ${
-                  selectedOperator === op ? 'text-white' : 'text-gray-300'
+                  selectedOperator === op ? 'text-white' : 'text-text-light dark:text-text-dark'
                 }`}>
                 {op}
               </Text>

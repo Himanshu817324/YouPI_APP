@@ -3,12 +3,12 @@ import { View, Text, Alert, ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import CheckoutHeader from '../../../components/molecules/Checkout/CheckoutHeader';
+// import CheckoutHeader from '../../../components/molecules/Checkout/CheckoutHeader';
 import PaymentMethod from '../../../components/molecules/Checkout/PaymentMethod';
 import CashbackOffer from '../../../components/molecules/Checkout/CashbackOffer';
 import PaymentSummary from '../../../components/molecules/Checkout/PaymentSummary';
 import CheckoutActions from '../../../components/molecules/Checkout/CheckoutActions';
-import PlanFeatures from '../../../components/molecules/Checkout/PlanFeatures';
+// import PlanFeatures from '../../../components/molecules/Checkout/PlanFeatures';
 
 type CheckoutRouteParams = {
   selectedPlan: string;
@@ -56,8 +56,8 @@ const Checkout = () => {
   }
 
   return (
-    <View className="flex-1 bg-slate-900">
-      <CheckoutHeader planName={planDetails.name} />
+    <View className="flex-1 bg-background-light dark:bg-background-dark">
+      {/* <CheckoutHeader planName={planDetails.name} /> */}
       <ScrollView className="px-4 py-6" showsVerticalScrollIndicator={false}>
         <PaymentMethod
           selectedPayment={selectedPayment}
@@ -74,7 +74,7 @@ const Checkout = () => {
           onPayment={handlePayment}
         />
 
-        <PlanFeatures features={planDetails.features} />
+        {/* <PlanFeatures features={planDetails.features} /> */}
       </ScrollView>
     </View>
   );

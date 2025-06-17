@@ -82,7 +82,7 @@ module.exports = {
         background: {
           light: '#e2f8f1',
           dark: '#111827',
-          gray: '#f2f2f2',
+          gray: '#ceffe0',
         },
         foreground: {
           light: '#F8FAFC',

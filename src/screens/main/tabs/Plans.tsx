@@ -8,6 +8,9 @@ import {
   Animated,
   Easing,
 } from 'react-native';
+import {useRoute} from '@react-navigation/native';
+import type {RouteProp} from '@react-navigation/native';
+import type {MainStackParamList} from '../../../types/navigation';
 
 import {
   allPlans,
@@ -19,7 +22,14 @@ import PlanTypeToggle from '../../../components/molecules/recharge/PlanTypeToggl
 import PlanCard from '../../../components/molecules/recharge/PlanCard';
 import RechargeBox from '../../../components/molecules/recharge/RechargeBox';
 
-const PlansScreen = () => {
+const PlansScreen = () => {  const route = useRoute<RouteProp<MainStackParamList, 'Plans'>>();
+  
+  useEffect(() => {
+    if (route.params?.provider) {
+      setSelectedOperator(route.params.provider);
+    }
+  }, [route.params?.provider]);
+
   const [selectedOperator, setSelectedOperator] = useState<Operator>('Jio');
   const [showEmiPlansOnly, setShowEmiPlansOnly] = useState(false);
   const glowAnim = useRef(new Animated.Value(1)).current;

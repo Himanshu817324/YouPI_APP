@@ -26,7 +26,9 @@ export type MainStackParamList = {
   Profile: undefined;
   Checkout: undefined;
   Settings: undefined;
-  Plans: undefined;
+  Plans: {
+    provider?: 'Airtel' | 'Jio' | 'Vi' | 'BSNL';
+  };
   Notification: undefined;
   Precheckout: {
     selectedPlan: string;

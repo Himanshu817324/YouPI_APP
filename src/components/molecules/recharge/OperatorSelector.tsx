@@ -19,33 +19,23 @@ const OperatorSelector: React.FC<OperatorSelectorProps> = ({
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      style={{
-        marginBottom: 20,
-      }}
-      contentContainerStyle={{
-        paddingHorizontal: 20,
-        gap: 10,
-      }}
+      style={{marginBottom: 20}}
+      contentContainerStyle={{paddingHorizontal: 20,gap: 10}}
     >
       {operators.map(op => (
         <TouchableOpacity
           key={op}
           onPress={() => onOperatorChange(op)}
-          style={{
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-            borderRadius: 25,
-            backgroundColor: selectedOperator === op ? '#007AFF' : '#F0F0F0',
-            minWidth: 80,
-            alignItems: 'center',
-          }}
+          className={`px-5 py-2.5 rounded-3xl min-w-[80px] items-center ${
+            selectedOperator === op ? 'bg-blue-500' : 'bg-gray-100'
+          }`}
         >
           <Text
-            style={{
-              color: selectedOperator === op ? 'white' : '#333',
-              fontWeight: selectedOperator === op ? '600' : '400',
-              fontSize: 14,
-            }}
+            className={`${
+              selectedOperator === op
+          ? 'text-white font-semibold'
+          : 'text-gray-700 font-normal'
+            } text-sm`}
           >
             {op}
           </Text>

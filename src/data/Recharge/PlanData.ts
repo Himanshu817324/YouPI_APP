@@ -9,13 +9,13 @@ export interface Plan {
   emi?: string;
 }
 
-export const operators = [ 'Airtel', 'Jio', 'Vi', 'BSNL'] as const;
+export const operators = ['Airtel', 'Jio', 'Vi', 'BSNL'] as const;
 
 export type Operator = (typeof operators)[number];
 
 export const operatorColors: Record<Operator, string> = {
-    Airtel: '#F44336',
-    Jio: '#4276fa',
+  Airtel: '#F44336',
+  Jio: '#4276fa',
   Vi: '#F44336',
   BSNL: '#4276fa',
 };

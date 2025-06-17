@@ -12,7 +12,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../types/navigation';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AppButton from '../../components/atoms/AppButton';
-import LogoWithCircles from '../../components/LogoWithCircles';
+import LogoWithCircles from '../../components/atoms/LogoWithCircles';
 import Toast from 'react-native-toast-message';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;

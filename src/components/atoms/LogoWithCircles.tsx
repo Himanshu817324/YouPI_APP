@@ -1,77 +1,110 @@
 import React from 'react';
-import {
-  View,
-  Image,
-  Dimensions,
-  StyleProp,
-  ViewStyle,
-} from 'react-native';
+import { View, Animated, Dimensions, Image } from 'react-native';
 
 const { width } = Dimensions.get('window');
-const DEFAULT_CIRCLE_SIZE = 140;
-const CIRCLE_COLOR_LEFT = '#000';
-const CIRCLE_COLOR_RIGHT = '#3ED3A3';
-const LOGO_SOURCE = require('../../assets/black_logo.png');
+const CIRCLE_SIZE = 90;
+const LOGO_SIZE = 70;
 
 interface LogoWithCirclesProps {
-  circleSize?: number;
-  containerStyle?: StyleProp<ViewStyle>;
+  animation?: Animated.Value | false;
+  secondCircleColor?: string;
 }
 
-const LogoWithCircles: React.FC<LogoWithCirclesProps> = ({
-  circleSize = DEFAULT_CIRCLE_SIZE,
-  containerStyle = {},
-}) => {
-  const overlap = circleSize * 0.25;
-  const totalSpacing = circleSize - overlap;
-  const centerX = width / 2;
+const LogoWithCircles = ({
+  animation = false,
+  secondCircleColor = '#ffffff',
+}: LogoWithCirclesProps) => {
+  const overlap = CIRCLE_SIZE * 0.25;
+  const totalSpacing = CIRCLE_SIZE - overlap;
 
-  const blackCircleX = centerX - totalSpacing / 2 - circleSize / 2;
-  const whiteCircleX = centerX + totalSpacing / 2 - circleSize / 2;
-  const logoLeft = blackCircleX + (circleSize - 80) / 2;
-  const logoTop = (circleSize - 80) / 2;
+  const centerX = width / 2;
+  const blackCircleX = centerX - totalSpacing / 2 - CIRCLE_SIZE / 2;
+  const whiteCircleX = centerX + totalSpacing / 2 - CIRCLE_SIZE / 2;
+  const logoOffset = (CIRCLE_SIZE - LOGO_SIZE) / 2;
+
+  const isAnimated = animation instanceof Animated.Value;
+
+  const logoTranslateX = isAnimated
+    ? animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, totalSpacing],
+      })
+    : 0;
+
+  const animatedStyle = isAnimated
+    ? { transform: [{ translateX: logoTranslateX }] }
+    : {};
+
+  const backgroundColor = isAnimated
+    ? animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['#3ED3A3', '#ffffff'],
+      })
+    : secondCircleColor;
 
   return (
-    <View
-      className="relative w-full -ml-5 mb-2"
-      style={[
-        containerStyle,
-        {
-          height: circleSize,
-          top: -circleSize / 2,
-        },
-      ]}
-    >
+    <View className="relative w-full mb-6" style={{ height: CIRCLE_SIZE }}>
       <View
-        className="absolute"
+        className="absolute rounded-full bg-black"
         style={{
+          width: CIRCLE_SIZE,
+          height: CIRCLE_SIZE,
           left: blackCircleX,
-          width: circleSize,
-          height: circleSize,
-          borderRadius: circleSize / 2,
-          backgroundColor: CIRCLE_COLOR_LEFT,
         }}
       />
-      <View
-        className="absolute"
-        style={{
-          left: whiteCircleX,
-          width: circleSize,
-          height: circleSize,
-          borderRadius: circleSize / 2,
-          backgroundColor: CIRCLE_COLOR_RIGHT,
-        }}
-      />
-      <Image
-        source={LOGO_SOURCE}
-        className="absolute w-20 h-[85px]"
-        style={{
-          left: logoLeft,
-          top: logoTop,
-          resizeMode: 'contain',
-          zIndex: 2,
-        }}
-      />
+
+      {isAnimated ? (
+        <Animated.View
+          className="absolute rounded-full"
+          style={{
+            width: CIRCLE_SIZE,
+            height: CIRCLE_SIZE,
+            left: whiteCircleX,
+            backgroundColor: backgroundColor,
+          }}
+        />
+      ) : (
+        <View
+          className="absolute rounded-full"
+          style={{
+            width: CIRCLE_SIZE,
+            height: CIRCLE_SIZE,
+            left: whiteCircleX,
+            backgroundColor: backgroundColor as string,
+          }}
+        />
+      )}
+
+      {isAnimated ? (
+        <Animated.Image
+          source={require('../../assets/black_logo.png')}
+          style={[
+            {
+              width: LOGO_SIZE,
+              height: LOGO_SIZE,
+              top: logoOffset,
+              left: blackCircleX + logoOffset - 4,
+              position: 'absolute',
+              resizeMode: 'contain',
+              zIndex: 2,
+            },
+            animatedStyle,
+          ]}
+        />
+      ) : (
+        <Image
+          source={require('../../assets/black_logo.png')}
+          style={{
+            width: LOGO_SIZE,
+            height: LOGO_SIZE,
+            top: logoOffset,
+            left: blackCircleX + logoOffset - 4,
+            position: 'absolute',
+            resizeMode: 'contain',
+            zIndex: 2,
+          }}
+        />
+      )}
     </View>
   );
 };

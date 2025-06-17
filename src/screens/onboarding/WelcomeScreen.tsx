@@ -4,7 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {OnboardingStackParamList} from '../../types/navigation';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AppButton from '../../components/atoms/AppButton';
-import LogoWithCircles from '../../components/LogoWithCircles';
+import LogoWithCircles from '../../components/atoms/LogoWithCircles';
 
 type WelcomeScreenNavigationProp = StackNavigationProp<
   OnboardingStackParamList,

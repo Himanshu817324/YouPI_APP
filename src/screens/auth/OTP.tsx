@@ -11,7 +11,7 @@ import {AuthStackParamList} from '../../types/navigation';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AppButton from '../../components/atoms/AppButton';
 import {useAuthStore} from '../../store/authStore';
-import LogoWithCircles from '../../components/LogoWithCircles';
+import LogoWithCircles from '../../components/atoms/LogoWithCircles';
 import Toast from 'react-native-toast-message';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OTP'>;

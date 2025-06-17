@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Animated, Easing } from 'react-native';
 import { View, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import LogoWithCircles from '../components/LogoWithCircles';
+import LogoWithCircles from '../components/atoms/LogoWithCircles';
 
 const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const sharedAnim = useRef(new Animated.Value(0)).current;

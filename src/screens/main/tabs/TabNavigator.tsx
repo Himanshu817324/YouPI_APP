@@ -27,31 +27,37 @@ type HomeHeaderRightProps = {
 };
 
 const HomeHeaderRight = ({navigation}: HomeHeaderRightProps) => (
-  <View className="flex-row items-center gap-2 pr-4">
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Notification')}
-      className="p-2 border border-[#3ED3A3] rounded-full">
-      <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
-    </TouchableOpacity>
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Profile')}
-      className=" border border-[#3ED3A3] rounded-full">
-      <Image
-        source={require('../../../assets/profile-2.jpeg')}
-        className="w-12 h-12 rounded-full"
-    resizeMode="cover"
-      />
-    </TouchableOpacity>
+  <View className="flex-row items-center gap-4 pr-6">
+    <View className="rounded-full p-[2px]" style={styles.glowCircle}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Notification')}
+        className="bg-[#121212] p-2 rounded-full border border-[#3ED3A3]">
+        <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
+      </TouchableOpacity>
+    </View>
+    <View className="rounded-full p-[2px]" style={styles.glowCircle}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Profile')}
+        className=" border border-[#3ED3A3] rounded-full">
+        <Image
+          source={require('../../../assets/profile-2.jpeg')}
+          className="w-12 h-12 rounded-full"
+          resizeMode="cover"
+        />
+      </TouchableOpacity>
+    </View>
   </View>
 );
 
 const HomeHeaderLeft = () => (
-  <TouchableOpacity className="ml-2 mr-2">
-    <Image
-      source={require('../../../assets/black_logo.png')}
-      style={styles.logo}
-    />
-  </TouchableOpacity>
+  <View className="rounded-full w-auto p-[5px] mx-4 " style={styles.glowCircle}>
+    <TouchableOpacity className=" border border-[#3ED3A3] rounded-full">
+      <Image
+        source={require('../../../assets/black_logo.png')}
+        style={styles.logo}
+      />
+    </TouchableOpacity>
+  </View>
 );
 
 export default function TabNavigator() {
@@ -122,5 +128,12 @@ const styles = StyleSheet.create({
     width: wp(10),
     height: hp(5),
     resizeMode: 'contain',
+  },
+  glowCircle: {
+    shadowColor: '#3ED3A3',
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.8,
+    shadowRadius: 15,
+    elevation: 15,
   },
 });

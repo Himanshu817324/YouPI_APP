@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Animated } from 'react-native';
+import {View, Text, Animated} from 'react-native';
+import {BatteryToggle} from '../../../components/atoms/BatteryToggle';
 
 interface PlanTypeToggleProps {
-  planType: 'monthly' | '3-month';
-  setPlanType: (type: 'monthly' | '3-month') => void;
+  showEmiPlansOnly: boolean;
+  setShowEmiPlansOnly: (show: boolean) => void;
+  glowAnim: Animated.Value;
 }
 
 const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
-  planType,
-  setPlanType,
+  showEmiPlansOnly,
+  setShowEmiPlansOnly,
+  glowAnim,
 }) => {
   return (
     <View className="bg-foreground-light dark:bg-foreground-dark rounded-2xl p-4 mb-5">
@@ -16,36 +19,31 @@ const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
         Select Plan Type
       </Text>
 
-      <View className="flex-row justify-between items-center">
+      <View className="flex-row justify-between items-center mb-4">
         <View>
-          <Text className="text-text-light dark:text-text-dark text-base font-medium">Monthly Plans</Text>
-          <Text className="text-slate-400 text-sm mt-1">Regular recharge plans</Text>
+          <Text className="text-text-light dark:text-text-dark text-base font-medium">
+            All Plans
+          </Text>
+          <Text className="text-slate-400 text-sm mt-1">
+            Regular recharge plans
+          </Text>
         </View>
 
-        <View className="flex-row items-center">
-          <View className="items-end mr-2">
-            <Text className="text-text-light dark:text-text-dark text-base font-medium">3-Month Plans</Text>
-            <Text className="text-emerald-400 text-sm font-medium mt-1">Smart Saver available</Text>
+        <View className="flex-row items-center gap-4">
+          <View className="items-end">
+            <Text className="text-text-light dark:text-text-dark text-base font-medium">
+              YouPI Powered Plans
+            </Text>
+            <Text className="text-emerald-400 text-sm font-medium mt-1">
+              Smart Saver available
+            </Text>
           </View>
-
-          <TouchableOpacity
-            onPress={() =>
-              setPlanType(planType === 'monthly' ? '3-month' : 'monthly')
-            }
-            activeOpacity={0.8}
-            className="w-12 h-6 rounded-full bg-slate-600 justify-center"
-          >
-            <Animated.View
-              className="absolute top-1 w-4 h-4 rounded-full bg-white"
-              style={{
-                transform: [
-                  {
-                    translateX: planType === '3-month' ? 24 : 4,
-                  },
-                ],
-              }}
-            />
-          </TouchableOpacity>
+          {/* Smart Saver Toggle */}
+          <BatteryToggle
+            isOn={showEmiPlansOnly}
+            onToggle={() => setShowEmiPlansOnly(!showEmiPlansOnly)}
+            glowAnim={glowAnim}
+          />
         </View>
       </View>
     </View>

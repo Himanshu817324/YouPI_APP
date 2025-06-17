@@ -1,4 +1,4 @@
-import { NavigatorScreenParams } from '@react-navigation/native';
+import {NavigatorScreenParams} from '@react-navigation/native';
 
 // -------- Onboarding Stack --------
 export type OnboardingStackParamList = {
@@ -9,7 +9,7 @@ export type OnboardingStackParamList = {
 // -------- Auth Stack --------
 export type AuthStackParamList = {
   Login: undefined;
-  OTP: { phNo: string };
+  OTP: {phNo: string};
 };
 
 // -------- Main Tab Stack --------
@@ -24,11 +24,22 @@ export type TabStackParamList = {
 export type MainStackParamList = {
   Tabs: NavigatorScreenParams<TabStackParamList>;
   Profile: undefined;
-  Precheckout: undefined;
   Checkout: undefined;
   Settings: undefined;
   Plans: undefined;
   Notification: undefined;
+  Precheckout: {
+    selectedPlan: string;
+    planDetails: {
+      name: string;
+      price: string;
+      validity: string;
+      data: string;
+      calls: string;
+      sms: string;
+      ott: string;
+    };
+  };
 };
 
 // -------- Root Stack --------

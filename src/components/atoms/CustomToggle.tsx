@@ -10,7 +10,7 @@ export const ToggleButton = ({
   <TouchableOpacity
     onPress={onToggle}
     className={`w-[44px] h-[24px] rounded-full px-1 flex-row items-center ${
-      isOn ? 'bg-[#000000] justify-end' : 'bg-[#127c1d] justify-start'
+      isOn ? 'bg-toggle-on justify-end' : 'bg-toggle-off justify-start'
     }`}
     activeOpacity={0.7}
   >

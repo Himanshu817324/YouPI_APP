@@ -29,8 +29,8 @@ module.exports = {
         '8xl': ['6rem', { lineHeight: '1' }],
         '9xl': ['8rem', { lineHeight: '1' }],
       },
-      fontWeight: {
-        hairline: '100',
+        fontWeight: {
+          hairline: '100',
         thin: '200',
         light: '300',
         normal: '400',
@@ -45,6 +45,14 @@ module.exports = {
           light: '#111827',
           dark: '#F9FAFB',
         },
+        textPrimary: {
+          light: '#F8F8FF',
+          dark: '#FFFFFF',
+        },
+        textSecondary: {
+          light: '#004D40',
+          dark: '#FFFFFF',
+        },
         subText: {
           light: '#4B5563',
           dark: '#9CA3AF',
@@ -57,6 +65,20 @@ module.exports = {
           light: '#6B7280',
           dark: '#9CA3AF',
         },
+        textWallet: {
+          primary: {
+            light: '#111111',
+            dark: '#F8F8FF',
+          },
+          secondary: {
+            light: '#111827',
+            dark: '#F0F0F0',
+          },
+        },
+        toggle: {
+          on: '#00D09C',
+          off: '#9CA3AF', //0F172A  1F2937
+        },
         background: {
           light: '#e2f8f1',
           dark: '#111827',
@@ -65,6 +87,22 @@ module.exports = {
         foreground: {
           light: '#F8FAFC',
           dark: '#1E293B',
+        },
+        primary: {
+          light: '#A3FFE2',
+          dark: '#00D09C',
+        },
+        primaryBackground: {
+          light: '#F9FAFB',
+          dark: '#1E1F29',
+        },
+        secondary: {
+          light: '#E5E7EB',
+          dark: '#2f3130',
+        },
+        warning: {
+          light: '#EF4444',
+          dark: '#EF4444',
         },
         card: {
           light: '#FFFFFF',
@@ -82,17 +120,9 @@ module.exports = {
           light: '#1E293B',
           dark: '#F8FAFC',
         },
-        primary: {
-          light: '#2563EB',
-          dark: '#3B82F6',
-        },
         'primary-foreground': {
           light: '#FFFFFF',
           dark: '#FFFFFF',
-        },
-        secondary: {
-          light: '#E5E7EB',
-          dark: '#374151',
         },
         'secondary-foreground': {
           light: '#111827',

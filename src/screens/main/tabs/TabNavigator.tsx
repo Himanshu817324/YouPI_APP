@@ -31,7 +31,7 @@ const HomeHeaderRight = ({navigation}: HomeHeaderRightProps) => (
     <View className="rounded-full p-[2px]" style={styles.glowCircle}>
       <TouchableOpacity
         onPress={() => navigation.navigate('Notification')}
-        className="bg-[#121212] p-2 rounded-full border border-[#3ED3A3]">
+        className="p-2 rounded-full border border-[#3ED3A3]">
         <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
       </TouchableOpacity>
     </View>

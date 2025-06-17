@@ -11,8 +11,8 @@ const PlanTypeToggle: React.FC<PlanTypeToggleProps> = ({
   setPlanType,
 }) => {
   return (
-    <View className="bg-slate-800 rounded-xl p-4 mb-5">
-      <Text className="text-white text-lg font-medium mb-3">
+    <View className="bg-foreground-dark dark:bg-background-light rounded-2xl p-4 mb-5">
+      <Text className="text-light text-lg font-medium mb-3">
         Select Plan Type
       </Text>
 

@@ -110,7 +110,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan = defaultPlan, planType }) => 
           {planType === '3-month' && (
             <View className="bg-red-600/90 border border-red-600 rounded-lg p-3 mb-4 flex-row items-center gap-2">
               <Text className="text-white text-base">💳</Text>
-              <Text className="text-white font-medium">Pay In Parts Available</Text>
+              <Text className="text-white font-medium">Smart Saver Available</Text>
             </View>
           )}
 

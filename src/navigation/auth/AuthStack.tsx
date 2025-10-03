@@ -4,6 +4,7 @@ import type { AuthStackParamList } from '../../types/navigation';
 
 import LoginScreen from '../../screens/auth/Login';
 import OTPScreen from '../../screens/auth/OTP';
+import ProfileScreen from '../../screens/auth/Profile';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
@@ -15,6 +16,7 @@ export default function AuthStack() {
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="OTP" component={OTPScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
 }

@@ -3,56 +3,90 @@ import {
   View,
   Text,
   TextInput,
-  Alert,
   TextInput as RNTextInput,
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../types/navigation';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AppButton from '../../components/atoms/AppButton';
-import {useAuthStore} from '../../store/authStore';
 import LogoWithCircles from '../../components/atoms/LogoWithCircles';
 import Toast from 'react-native-toast-message';
+import { authInstance as auth } from '../../config/firebase';
+import { PhoneAuthProvider, signInWithCredential } from '@react-native-firebase/auth';
+import { useAuthStore } from '../../store/authStore';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'OTP'>;
 
-export default function OtpScreen({route}: Props) {
-  const {phNo} = route.params;
-  const [otp, setOtp] = useState(['', '', '', '']);
+export default function OtpScreen({route, navigation}: Props) {
+  const {phNo, verificationId} = route.params;
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [loading, setLoading] = useState(false);
   const inputRefs = useRef<RNTextInput[]>([]);
-  const {login} = useAuthStore();
+  const {loginWithBackendAfterOTP} = useAuthStore();
 
   const handleVerify = async (enteredOtp?: string) => {
     const otpCode = enteredOtp ?? otp.join('');
-    if (otpCode.length !== 4) {
+    if (otpCode.length !== 6) {
       Toast.show({
         type: 'error',
         text1: 'Error',
-        text2: 'Please enter the full 4-digit OTP',
+        text2: 'Please enter the full 6-digit OTP',
       });
 
       return;
     }
 
     try {
-      await login({phNo: Number(phNo)});
-      Toast.show({
-        type: 'success',
-        text1: 'Verified!',
-        text2: 'You have successfully logged in.',
-      });
-    } catch (error) {
+      setLoading(true);
+
+      // Create credential with verification ID and OTP
+      const credential = PhoneAuthProvider.credential(verificationId, otpCode);
+
+      // Sign in with the credential
+      const userCredential = await signInWithCredential(auth, credential);
+
+      console.log('User signed in:', userCredential.user.uid);
+
+      // Check if user exists in backend and handle accordingly
+      const result = await loginWithBackendAfterOTP(userCredential.user.uid, phNo);
+
+      if (result.isNewUser) {
+        // User doesn't exist, navigate to profile creation
+        Toast.show({
+          type: 'info',
+          text1: 'OTP Verified!',
+          text2: 'Please complete your profile.',
+        });
+
+        // Navigate to profile screen
+        navigation.navigate('Profile', {
+          firebaseUid: userCredential.user.uid,
+          mobileNo: phNo,
+        });
+      } else {
+        // User exists, they are now logged in
+        Toast.show({
+          type: 'success',
+          text1: 'Welcome Back!',
+          text2: 'You have successfully logged in.',
+        });
+
+        // Navigation will be handled by RootNavigator based on auth state
+      }
+    } catch (error: any) {
       console.error('OTP Verification Error:', error);
       Toast.show({
         type: 'error',
         text1: 'Verification Failed',
-        text2: 'Please try again.',
+        text2: error.message || 'Please try again.',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleChange = async (text: string, index: number) => {
-    if (text.length === 4 && /^\d{4}$/.test(text)) {
+    if (text.length === 6 && /^\d{6}$/.test(text)) {
       const newOtp = text.split('');
       setOtp(newOtp);
       newOtp.forEach((val, idx) => {
@@ -89,14 +123,16 @@ export default function OtpScreen({route}: Props) {
         Sent To +91{phNo}
       </Text>
 
-      <View className="flex-row justify-center my-6 gap-6">
+      <View className="flex-row justify-center my-6 gap-3">
         {otp.map((digit, index) => (
           <TextInput
             key={index}
             ref={ref => {
-              if (ref) inputRefs.current[index] = ref;
+              if (ref) {
+                inputRefs.current[index] = ref;
+              }
             }}
-            className="w-12 h-12 rounded-lg bg-[#3ED3A3] text-white text-xl font-bold text-center"
+            className="w-10 h-12 rounded-lg bg-[#3ED3A3] text-white text-xl font-bold text-center"
             maxLength={1}
             keyboardType="numeric"
             value={digit}
@@ -123,9 +159,13 @@ export default function OtpScreen({route}: Props) {
       </Text>
 
       <AppButton
-        title="Verify"
+        title={loading ? 'Verifying...' : 'Verify'}
         onPress={() => handleVerify()}
-        style={{width: '70%', alignSelf: 'center'}}
+        style={{
+          width: '70%',
+          alignSelf: 'center',
+          backgroundColor: loading ? '#ccc' : '#3ED3A3',
+        }}
       />
     </SafeAreaView>
   );

@@ -9,7 +9,8 @@ export type OnboardingStackParamList = {
 // -------- Auth Stack --------
 export type AuthStackParamList = {
   Login: undefined;
-  OTP: {phNo: string};
+  OTP: {phNo: string; verificationId: string};
+  Profile: {firebaseUid: string; mobileNo: string};
 };
 
 // -------- Main Tab Stack --------

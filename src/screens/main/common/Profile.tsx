@@ -8,12 +8,34 @@ import {
   Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useAuthStore} from '../../../store/authStore';
+import Toast from 'react-native-toast-message';
 
 const ProfileScreen = () => {
+  const {user, logout} = useAuthStore();
+
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
       {text: 'Cancel', style: 'cancel'},
-      {text: 'Logout', onPress: () => console.log('Logged out')},
+      {
+        text: 'Logout', 
+        onPress: async () => {
+          try {
+            await logout();
+            Toast.show({
+              type: 'success',
+              text1: 'Logged out successfully',
+            });
+          } catch (error) {
+            console.error('Logout error:', error);
+            Toast.show({
+              type: 'error',
+              text1: 'Logout failed',
+              text2: 'Please try again',
+            });
+          }
+        }
+      },
     ]);
   };
 
@@ -21,15 +43,19 @@ const ProfileScreen = () => {
     <SafeAreaView className="flex-1 bg-[#e2f8f1] dark:bg-background-dark">
       <ScrollView className='px-5 flex-1'>
         <View className="items-center mt-8 mb-5">
-          <Image
-            source={require('../../../assets/profile-2.jpeg')}
-            className="w-[8rem] h-[8rem] border-2 border-[#00D09C] rounded-full mb-3"
-          />
+          <View className="w-[8rem] h-[8rem] border-2 border-[#00D09C] rounded-full mb-3 bg-[#3ED3A3] items-center justify-center">
+            <Text className="text-4xl font-bold text-white">
+              {user?.fullName?.charAt(0) || 'U'}
+            </Text>
+          </View>
           <Text className="text-3xl font-semibold text-black dark:text-white">
-            John Doe
+            {user?.fullName || 'User'}
           </Text>
           <Text className="text-xl text-gray-500 dark:text-gray-400">
-            john.doe@example.com
+            {user?.email || 'No email provided'}
+          </Text>
+          <Text className="text-lg text-gray-500 dark:text-gray-400 mt-1">
+            +91 {user?.mobileNumber || 'No phone number'}
           </Text>
         </View>
 
@@ -57,6 +83,7 @@ const ProfileScreen = () => {
           <Text className="text-white font-semibold text-2xl">Logout</Text>
         </TouchableOpacity>
       </ScrollView>
+      <Toast />
     </SafeAreaView>
   );
 };

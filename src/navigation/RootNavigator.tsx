@@ -10,7 +10,7 @@ import { RootStackParamList } from '../types/navigation';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
-  const { user, loading, hasOnboarded } = useAuthStore();
+  const { user, loading, hasOnboarded, isLoggedIn } = useAuthStore();
 
   if (loading) {
     return (
@@ -24,7 +24,7 @@ export default function RootNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {!hasOnboarded ? (
         <Stack.Screen name="OnboardingStack" component={OnboardingStack} />
-      ) : !user ? (
+      ) : !isLoggedIn ? (
         <Stack.Screen name="AuthStack" component={AuthStack} />
       ) : (
         <Stack.Screen name="MainStack" component={MainStack} />

@@ -3,22 +3,23 @@ import {
   View,
   TextInput,
   Text,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../../types/navigation';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AppButton from '../../components/atoms/AppButton';
 import LogoWithCircles from '../../components/atoms/LogoWithCircles';
 import Toast from 'react-native-toast-message';
+import { authInstance as auth } from '../../config/firebase';
+import { signInWithPhoneNumber } from '@react-native-firebase/auth';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 export default function LoginScreen({navigation}: Props) {
   const [phNo, setPhNo] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!phNo || phNo.length !== 10) {
@@ -30,23 +31,36 @@ export default function LoginScreen({navigation}: Props) {
     }
 
     try {
-      await AsyncStorage.setItem('userPhone', phNo);
-      await AsyncStorage.setItem('isLoggedIn', 'true');
+      setLoading(true);
+      
+      // Format phone number with country code
+      const formattedPhone = `+91${phNo}`;
 
+      // Use Firebase signInWithPhoneNumber directly
+      const confirmation = await signInWithPhoneNumber(auth, formattedPhone);
+
+      console.log('Verification ID:', confirmation.verificationId);
+      
       Toast.show({
         type: 'success',
         text1: 'OTP sent',
         text2: 'Redirecting to OTP screen...',
       });
 
-      navigation.navigate('OTP', {phNo});
-    } catch (error) {
+      // Navigate to OTP screen with verification ID
+      navigation.navigate('OTP', {
+        phNo,
+        verificationId: confirmation.verificationId || '',
+      });
+    } catch (error: any) {
       console.error('Login error:', error);
       Toast.show({
         type: 'error',
         text1: 'Login failed',
-        text2: 'Please try again later.',
+        text2: error.message || 'Please try again later.',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,14 +94,15 @@ export default function LoginScreen({navigation}: Props) {
         </View>
 
         <AppButton
-          title="Get OTP"
+          title={loading ? 'Sending...' : 'Get OTP'}
           style={{
             paddingHorizontal: 90,
             paddingVertical: 16,
             borderRadius: 20,
-            backgroundColor: '#3ED3A3',
+            backgroundColor: loading ? '#ccc' : '#3ED3A3',
           }}
           onPress={handleLogin}
+          disabled={loading}
         />
       </KeyboardAvoidingView>
       <Toast />

@@ -12,6 +12,7 @@ import { useAuthStore } from './src/store/authStore';
 import SplashScreen from './src/screens/SplashScreen';
 import RootNavigator from './src/navigation/RootNavigator';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { initializeFirebaseServices } from './src/services/firebaseService';
 import './global.css';
 import Toast from 'react-native-toast-message';
 
@@ -25,7 +26,19 @@ export default function App() {
   const deviceColorScheme = useColorScheme();
 
   useEffect(() => {
-    initializeAuth();
+    const initializeApp = async () => {
+      try {
+        // Initialize Firebase services
+        await initializeFirebaseServices();
+        
+        // Initialize auth store
+        await initializeAuth();
+      } catch (error) {
+        console.error('App initialization error:', error);
+      }
+    };
+
+    initializeApp();
   }, [initializeAuth]);
 
   const handleSplashComplete = () => {

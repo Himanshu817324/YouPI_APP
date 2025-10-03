@@ -12,12 +12,17 @@ interface AppButtonProps {
   title: string;
   onPress: (event: GestureResponderEvent) => void;
   style?: StyleProp<ViewStyle>;
+  disabled?: boolean;
 }
 
-const AppButton: React.FC<AppButtonProps> = ({ title, onPress, style }) => {
+const AppButton: React.FC<AppButtonProps> = ({ title, onPress, style, disabled = false }) => {
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+    <TouchableOpacity 
+      style={[styles.button, style, disabled && styles.disabled]} 
+      onPress={disabled ? undefined : onPress}
+      disabled={disabled}
+    >
+      <Text style={[styles.text, disabled && styles.disabledText]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -33,9 +38,16 @@ const styles = StyleSheet.create({
     marginTop: 20,
     elevation: 3,
   },
+  disabled: {
+    backgroundColor: '#ccc',
+    elevation: 0,
+  },
   text: {
     color: '#fff',
     fontSize: 20,
     fontWeight: '600',
+  },
+  disabledText: {
+    color: '#999',
   },
 });

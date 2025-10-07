@@ -10,8 +10,12 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAuthStore} from '../../../store/authStore';
 import Toast from 'react-native-toast-message';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { MainStackParamList } from '../../../types/navigation';
 
-const ProfileScreen = () => {
+type Props = NativeStackScreenProps<MainStackParamList, 'Profile'>;
+
+const ProfileScreen = ({ navigation }: Props) => {
   const {user, logout} = useAuthStore();
 
   const handleLogout = () => {
@@ -63,8 +67,7 @@ const ProfileScreen = () => {
           <Text className="text-[#00D09C] text-2xl font-medium mb-2">
             Account Settings
           </Text>
-          <ProfileItem label="Edit Profile" onPress={() => {}} />
-          <ProfileItem label="Change Password" onPress={() => {}} />
+          <ProfileItem label="Edit Profile" onPress={() => navigation.navigate('EditProfile')} />
           <ProfileItem label="Payment History" onPress={() => {}} />
         </View>
 

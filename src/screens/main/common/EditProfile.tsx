@@ -1,6 +1,4 @@
-// Profile.tsx
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,26 +9,76 @@ import {
   Platform,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../types/navigation';
+import { MainStackParamList } from '../../../types/navigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AppButton from '../../components/atoms/AppButton';
-import LogoWithCircles from '../../components/atoms/LogoWithCircles';
+import AppButton from '../../../components/atoms/AppButton';
+import LogoWithCircles from '../../../components/atoms/LogoWithCircles';
 import Toast from 'react-native-toast-message';
-import { apiService } from '../../services/apiService';
-import { useAuthStore } from '../../store/authStore';
+import { apiService } from '../../../services/apiService';
+import { useAuthStore } from '../../../store/authStore';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
+type Props = NativeStackScreenProps<MainStackParamList, 'EditProfile'>;
 
-export default function ProfileScreen({ route }: Props) {
-  const { firebaseUid, mobileNo } = route.params;
+export default function EditProfileScreen({ navigation }: Props) {
+  const { user, loginWithBackend } = useAuthStore();
   const [formData, setFormData] = useState({
     fullname: '',
     email: '',
     gender: '',
   });
   const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
-  const { loginWithBackend } = useAuthStore();
+
+  // Load existing profile data
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        setInitialLoading(true);
+        
+        // First try to get data from the store
+        if (user) {
+          setFormData({
+            fullname: user.fullName || '',
+            email: user.email || '',
+            gender: user.gender || '',
+          });
+          setInitialLoading(false);
+          return;
+        }
+
+        // If no user in store, fetch from API
+        if (user?.mobileNumber) {
+          const formattedMobileNumber = user.mobileNumber.startsWith('+91') 
+            ? user.mobileNumber.replace('+91', '') 
+            : user.mobileNumber;
+          
+          const profileData = await apiService.getUserProfile(formattedMobileNumber);
+          
+          // Handle different response formats
+          const userData = profileData.user || profileData;
+          if (userData) {
+            setFormData({
+              fullname: userData.fullName || '',
+              email: userData.email || '',
+              gender: userData.gender || '',
+            });
+          }
+        }
+      } catch (error: any) {
+        console.error('Error loading profile data:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error Loading Profile',
+          text2: error.message || 'Failed to load profile data',
+        });
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+
+    loadProfileData();
+  }, [user]);
 
   const validateForm = () => {
     const newErrors: {[key: string]: string} = {};
@@ -72,95 +120,84 @@ export default function ProfileScreen({ route }: Props) {
       return;
     }
 
+    if (!user?.mobileNumber) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'User mobile number not found',
+      });
+      return;
+    }
+
     try {
       setLoading(true);
 
-      // Validate required fields
-      if (!firebaseUid || !mobileNo || !formData.fullname.trim() || !formData.email.trim() || !formData.gender) {
-        throw new Error('Missing required fields for signup');
-      }
-
       // Ensure mobile number is in correct format (remove +91 prefix if present)
-      const formattedMobileNumber = mobileNo.startsWith('+91') ? mobileNo.replace('+91', '') : mobileNo;
-      console.log('Original mobile number:', mobileNo);
-      console.log('Formatted mobile number:', formattedMobileNumber);
+      const formattedMobileNumber = user.mobileNumber.startsWith('+91') 
+        ? user.mobileNumber.replace('+91', '') 
+        : user.mobileNumber;
 
-      // Create signup data in the exact format expected by the API
-      const signupData = {
-        mobileNumber: formattedMobileNumber,
+      console.log('Updating profile for mobile:', formattedMobileNumber);
+      
+      const updateData = {
         fullName: formData.fullname.trim(),
         email: formData.email.trim(),
         gender: formData.gender,
-        fireBaseUUID: firebaseUid,
-        password: null,
       };
 
-      console.log('Signup data being sent:', signupData);
-      console.log('Firebase UID:', firebaseUid);
+      console.log('Update data being sent:', updateData);
 
-      // Skip uniqueness checks since backend only has /users-normal/create endpoint
-      console.log('Proceeding directly to signup...');
-
-      const response = await apiService.signupUser(signupData);
-      console.log('Signup API response:', response);
-      console.log('Signup response success:', response.success);
-      console.log('Signup response user:', response.user);
-      console.log('Signup response message:', response.message);
+      const response = await apiService.updateProfile(formattedMobileNumber, updateData);
+      console.log('Update API response:', response);
 
       // Handle different response formats
-      console.log('Processing signup response...');
-
-      // Handle both response formats: {success: true, user: {...}} or direct user object
       if ((response.success && response.user) || response.id) {
-        console.log('Signup successful, logging in user...');
+        console.log('Profile update successful');
         // Clear cache for this user to ensure fresh data
-        apiService.clearCacheForUser(mobileNo);
-        // Use user property if available, otherwise use the response itself
+        apiService.clearCacheForUser(user.mobileNumber);
+        
+        // Update the user in the store if we have the updated user data
         const userData = response.user || response as any;
-        await loginWithBackend(userData);
+        if (userData) {
+          await loginWithBackend(userData);
+        }
 
         Toast.show({
           type: 'success',
-          text1: 'Profile Created!',
-          text2: 'Welcome to YouPI!',
+          text1: 'Profile Updated!',
+          text2: 'Your profile has been updated successfully',
         });
-      } else if (response.success === false) {
-        // Handle explicit failure
-        console.log('Signup explicitly failed:', response);
-        throw new Error(response.message || 'Failed to create profile');
+
+        // Navigate back to profile screen
+        navigation.goBack();
       } else {
-        // Handle unknown response format
-        console.log('Unknown signup response format:', response);
-        console.log('Response keys:', Object.keys(response));
-
-        // Try to extract user data from response
-        const userData = response.user || (response as any).data || response;
-        if (userData && ((userData as any).id || (userData as any).mobileNumber)) {
-          console.log('Found user data in response, attempting login...');
-          // Clear cache for this user to ensure fresh data
-          apiService.clearCacheForUser(mobileNo);
-          await loginWithBackend(userData as any);
-
-          Toast.show({
-            type: 'success',
-            text1: 'Profile Created!',
-            text2: 'Welcome to YouPI!',
-          });
-        } else {
-          throw new Error(response.message || 'Failed to create profile - unknown response format');
-        }
+        throw new Error(response.message || 'Failed to update profile');
       }
     } catch (error: any) {
-      console.error('Profile creation error:', error);
+      console.error('Profile update error:', error);
       Toast.show({
         type: 'error',
-        text1: 'Profile Creation Failed',
+        text1: 'Profile Update Failed',
         text2: error.message || 'Please try again later.',
       });
     } finally {
       setLoading(false);
     }
   };
+
+  // Show loading screen while fetching profile data
+  if (initialLoading) {
+    return (
+      <SafeAreaView className="flex-1 bg-[#E2F8F1]">
+        <View className="flex-1 justify-center items-center">
+          <LogoWithCircles animation={true} secondCircleColor="#3ED3A3" />
+          <Text className="text-xl font-semibold text-center text-black mt-4">
+            Loading Profile...
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-[#E2F8F1]">
@@ -176,10 +213,10 @@ export default function ProfileScreen({ route }: Props) {
           <View className="items-center mt-8 mb-6">
             <LogoWithCircles animation={false} secondCircleColor="#3ED3A3" />
             <Text className="text-3xl font-bold text-center text-black mt-4">
-              Complete Your <Text className="text-[#3ED3A3]">Profile</Text>
+              Edit Your <Text className="text-[#3ED3A3]">Profile</Text>
             </Text>
             <Text className="text-center text-lg text-gray-600 mt-2">
-              Tell us a bit about yourself
+              Update your information
             </Text>
           </View>
 
@@ -228,7 +265,7 @@ export default function ProfileScreen({ route }: Props) {
                 Mobile Number
               </Text>
               <View className="bg-gray-100 rounded-xl border border-gray-300 px-4 py-4">
-                <Text className="text-lg text-gray-600">+91 {mobileNo}</Text>
+                <Text className="text-lg text-gray-600">+91 {user?.mobileNumber || 'No phone number'}</Text>
               </View>
             </View>
 
@@ -263,7 +300,7 @@ export default function ProfileScreen({ route }: Props) {
             </View>
 
             <AppButton
-              title={loading ? "Creating Profile..." : "Complete Profile"}
+              title={loading ? "Updating Profile..." : "Update Profile"}
               onPress={handleSubmit}
               disabled={loading}
               style={{
@@ -274,12 +311,14 @@ export default function ProfileScreen({ route }: Props) {
               }}
             />
 
-            <Text className="text-center text-sm text-gray-500 mt-4 px-4">
-              By continuing, you agree to our{' '}
-              <Text className="text-[#3ED3A3] font-semibold">Terms of Service</Text>
-              {' '}and{' '}
-              <Text className="text-[#3ED3A3] font-semibold">Privacy Policy</Text>
-            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              className="mt-4 py-3 rounded-xl border-2 border-gray-300"
+            >
+              <Text className="text-center font-semibold text-gray-700 text-lg">
+                Cancel
+              </Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

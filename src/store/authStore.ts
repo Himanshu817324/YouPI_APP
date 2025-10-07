@@ -1,4 +1,4 @@
-// authStore.ts
+﻿// authStore.ts
 
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,8 +20,11 @@ type User = {
   email: string;
   fireBaseUUID: string;
   gender: string;
+  password: null;
   active: boolean;
   verified: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type AuthStore = {
@@ -85,6 +88,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   loginWithBackend: async (apiUser) => {
+    console.log('loginWithBackend called with:', apiUser);
     const userData: User = {
       id: apiUser.id,
       mobileNumber: apiUser.mobileNumber,
@@ -92,36 +96,97 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       email: apiUser.email,
       fireBaseUUID: apiUser.fireBaseUUID,
       gender: apiUser.gender,
+      password: (apiUser as any).password,
       active: apiUser.active,
       verified: apiUser.verified,
+      createdAt: apiUser.createdAt,
+      updatedAt: apiUser.updatedAt,
     };
     await AsyncStorage.setItem('user', JSON.stringify(userData));
     set({ user: userData, isLoggedIn: true });
+    console.log('User logged in successfully, isLoggedIn set to true');
   },
 
   loginWithBackendAfterOTP: async (firebaseUid: string, mobileNo: string) => {
     try {
       set({ loading: true });
-      const userCheck = await apiService.checkUser(mobileNo);
 
-      if (userCheck.exists && userCheck.user) {
-        // User exists, log them in with backend data
-        const loginResponse = await apiService.loginUser(mobileNo);
-        if (loginResponse.success && loginResponse.user) {
-          await get().loginWithBackend(loginResponse.user);
+      try {
+        console.log('ðŸ” Checking user existence...');
+        const userCheck = await apiService.checkUser(mobileNo);
+
+        console.log('âœ… CheckUser API Response:', userCheck);
+
+        // CheckUser API returns boolean: true if user exists, false if not
+        const userExists = userCheck === true;
+        console.log('ðŸ“Š User exists:', userExists);
+
+        if (userExists) {
+          // User exists, log them in with backend data
+          console.log('ðŸ‘¤ User exists, logging in...');
+          try {
+            const loginResponse = await apiService.loginUser(mobileNo);
+            console.log('ðŸ” Login API Response:', loginResponse);
+
+            // Handle both response formats: {success: true, user: {...}} or direct user object
+            if ((loginResponse.success && loginResponse.user) || loginResponse.id) {
+              console.log('✅ Login successful, setting user data');
+              // Use user property if available, otherwise use the response itself
+              const userData = loginResponse.user || loginResponse as ApiUser;
+              await get().loginWithBackend(userData);
+            } else {
+              console.log('âŒ Login response indicates failure:', {
+                success: loginResponse.success,
+                message: loginResponse.message,
+                user: loginResponse.user,
+              });
+              throw new Error(loginResponse.message || 'Login failed - no user data returned');
+            }
+            set({ loading: false });
+            return { isNewUser: false };
+          } catch (loginError: any) {
+            console.error('ðŸ’¥ Login API failed:', loginError);
+            console.log('Login error details:', {
+              message: loginError.message,
+              stack: loginError.stack,
+            });
+
+            // If login fails but user exists, we can still proceed to profile creation
+            // This handles cases where the login endpoint might be down but user exists
+            console.log('ðŸ”„ Login failed but user exists, proceeding to profile creation as fallback');
+            set({ loading: false });
+            return { isNewUser: true };
+          }
         } else {
-          throw new Error(loginResponse.message || "Login failed");
+          // User doesn't exist, they need to create profile
+          console.log('ðŸ†• New user detected, proceeding to profile creation');
+          set({ loading: false });
+          return { isNewUser: true };
         }
-        set({ loading: false }); // <-- SET LOADING FALSE HERE
-        return { isNewUser: false };
-      } else {
-        // User doesn't exist, they need to create profile
-        set({ loading: false }); // <-- AND SET LOADING FALSE HERE
-        return { isNewUser: true };
+      } catch (checkError: any) {
+        console.log('âŒ CheckUser API failed:', checkError);
+
+        // Handle timeout errors gracefully
+        if (checkError.message.includes('timeout')) {
+          console.log('â° CheckUser timed out, assuming new user for better UX');
+          set({ loading: false });
+          return { isNewUser: true };
+        }
+
+        // If check user API fails (404, 500, etc.), assume user is new
+        // This allows the flow to continue to profile creation
+        if (checkError.message.includes('404') || checkError.message.includes('500')) {
+          console.log('ðŸ”§ CheckUser API not available, assuming new user');
+          set({ loading: false });
+          return { isNewUser: true };
+        } else {
+          // Re-throw other errors
+          throw checkError;
+        }
       }
     } catch (error) {
       console.error('Backend login/check error:', error);
-      set({ loading: false }); // <-- AND ALSO HERE ON ERROR
+      set({ loading: false });
       throw error;
     }
   },
@@ -166,10 +231,25 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
       // FIXED: Use the modular onAuthStateChanged function and pass the auth instance.
       onAuthStateChanged(auth, (user: FirebaseAuthTypes.User | null) => {
+        console.log('Firebase Auth State Changed:', user ? 'User exists' : 'User null');
         if (user) {
           set({ firebaseUser: user });
         } else {
-          set({ firebaseUser: null, user: null, isLoggedIn: false });
+          // Only reset auth state if we don't have a logged in user
+          const currentState = get();
+          console.log('Current auth state when Firebase user null:', {
+            isLoggedIn: currentState.isLoggedIn,
+            hasUser: !!currentState.user,
+            hasFirebaseUser: !!currentState.firebaseUser,
+          });
+          if (!currentState.isLoggedIn && !currentState.user) {
+            console.log('Firebase user null and not logged in, resetting auth state');
+            set({ firebaseUser: null, user: null, isLoggedIn: false });
+          } else {
+            console.log('Firebase user null but user is logged in, keeping auth state');
+            // Keep the current state but update firebaseUser to null
+            set({ firebaseUser: null });
+          }
         }
       });
 

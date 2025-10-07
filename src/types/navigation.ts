@@ -25,6 +25,7 @@ export type TabStackParamList = {
 export type MainStackParamList = {
   Tabs: NavigatorScreenParams<TabStackParamList>;
   Profile: undefined;
+  EditProfile: undefined;
   Checkout: undefined;
   Settings: undefined;
   Plans: {
@@ -51,5 +52,6 @@ export type RootStackParamList = {
   OnboardingStack: NavigatorScreenParams<OnboardingStackParamList>;
   AuthStack: NavigatorScreenParams<AuthStackParamList>;
   MainStack: NavigatorScreenParams<MainStackParamList>;
+  Profile: { firebaseUid: string; mobileNo: string };
   NotFound: undefined;
 };

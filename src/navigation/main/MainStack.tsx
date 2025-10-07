@@ -5,6 +5,7 @@ import type {MainStackParamList} from '../../types/navigation';
 
 import TabNavigator from '../../screens/main/tabs/TabNavigator';
 import ProfileScreen from '../../screens/main/common/Profile';
+import EditProfileScreen from '../../screens/main/common/EditProfile';
 import Precheckout from '../../screens/main/common/Precheckout';
 import Checkout from '../../screens/main/common/Checkout';
 import NotificationScreen from '../../screens/main/common/Notification';
@@ -36,6 +37,14 @@ export default function MainStack() {
         component={ProfileScreen}
         options={{
           title: 'Profile',
+          animation: 'slide_from_right',
+        }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{
+          title: 'Edit Profile',
           animation: 'slide_from_right',
         }}
       />

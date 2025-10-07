@@ -49,20 +49,20 @@ export default function OtpScreen({route, navigation}: Props) {
 
       // Check if user exists in backend and handle accordingly
       const result = await loginWithBackendAfterOTP(userCredential.user.uid, phNo);
+      
+      console.log('OTP Verification Result:', result);
 
       if (result.isNewUser) {
-        // User doesn't exist, navigate to profile creation
+        // User doesn't exist, RootNavigator will show Profile screen automatically
         Toast.show({
           type: 'info',
           text1: 'OTP Verified!',
           text2: 'Please complete your profile.',
         });
 
-        // Navigate to profile screen
-        navigation.navigate('Profile', {
-          firebaseUid: userCredential.user.uid,
-          mobileNo: phNo,
-        });
+        // Navigation will be handled by RootNavigator based on auth state
+        // RootNavigator will detect firebaseUser exists but isLoggedIn is false
+        // and automatically show Profile screen
       } else {
         // User exists, they are now logged in
         Toast.show({

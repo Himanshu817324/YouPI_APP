@@ -100,3 +100,32 @@
 # Keep all classes that might be accessed via reflection
 -keep class * extends java.lang.Exception { *; }
 -keep class * implements java.io.Serializable { *; }
+
+# Keep API service classes and methods
+-keep class com.YouPI.** { *; }
+-keep class * extends com.YouPI.** { *; }
+
+# Keep fetch and network related classes
+-keep class com.facebook.react.modules.network.** { *; }
+-keep class com.facebook.react.modules.fetch.** { *; }
+
+# Keep JavaScript bridge classes
+-keep class com.facebook.react.bridge.** { *; }
+-keep class com.facebook.react.bridge.WritableMap { *; }
+-keep class com.facebook.react.bridge.ReadableMap { *; }
+-keep class com.facebook.react.bridge.WritableArray { *; }
+-keep class com.facebook.react.bridge.ReadableArray { *; }
+
+# Keep all React Native modules
+-keep class com.facebook.react.modules.** { *; }
+
+# Keep all native methods that might be called from JavaScript
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# Keep all classes with @ReactMethod annotation
+-keep @com.facebook.react.bridge.ReactMethod class * { *; }
+-keepclassmembers class * {
+    @com.facebook.react.bridge.ReactMethod <methods>;
+}

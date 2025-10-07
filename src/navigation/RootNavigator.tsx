@@ -1,16 +1,27 @@
+// src/navigation/RootNavigator.tsx
+
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useAuthStore } from '../store/authStore';
-import OnboardingStack from './onboarding/OnboardingStack';
+
 import AuthStack from './auth/AuthStack';
 import MainStack from './main/MainStack';
+import ProfileScreen from '../screens/auth/Profile';
+
 import { RootStackParamList } from '../types/navigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
-  const { user, loading, hasOnboarded, isLoggedIn } = useAuthStore();
+  const { isLoggedIn, firebaseUser, loading } = useAuthStore();
+
+  // Debug logging
+  console.log('RootNavigator - Auth State:', {
+    isLoggedIn,
+    firebaseUser: firebaseUser ? 'exists' : 'null',
+    loading
+  });
 
   if (loading) {
     return (
@@ -22,12 +33,22 @@ export default function RootNavigator() {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {!hasOnboarded ? (
-        <Stack.Screen name="OnboardingStack" component={OnboardingStack} />
-      ) : !isLoggedIn ? (
-        <Stack.Screen name="AuthStack" component={AuthStack} />
-      ) : (
+      {isLoggedIn ? (
+        // STATE 1: User is fully logged in -> show the main app
         <Stack.Screen name="MainStack" component={MainStack} />
+      ) : firebaseUser ? (
+        // STATE 2: User has Firebase auth but no backend profile -> show Profile screen directly
+        <Stack.Screen 
+          name="Profile" 
+          component={ProfileScreen}
+          initialParams={{
+            firebaseUid: firebaseUser.uid,
+            mobileNo: firebaseUser.phoneNumber?.replace('+91', '') || ''
+          }}
+        />
+      ) : (
+        // STATE 3: User is completely logged out -> show auth stack starting with Login
+        <Stack.Screen name="AuthStack" component={AuthStack} />
       )}
     </Stack.Navigator>
   );

@@ -20,6 +20,7 @@ type User = {
   email: string;
   fireBaseUUID: string;
   gender: string;
+  profileImageUrl?: string;
   password: null;
   active: boolean;
   verified: boolean;
@@ -96,6 +97,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       email: apiUser.email,
       fireBaseUUID: apiUser.fireBaseUUID,
       gender: apiUser.gender,
+      profileImageUrl: apiUser.profileImageUrl,
       password: (apiUser as any).password,
       active: apiUser.active,
       verified: apiUser.verified,

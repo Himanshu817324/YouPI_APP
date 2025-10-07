@@ -14,6 +14,7 @@ export interface User {
   email: string;
   fireBaseUUID: string;
   gender: string;
+  profileImageUrl?: string;
   active: boolean;
   verified: boolean;
   createdAt: string;
@@ -35,6 +36,7 @@ export interface ApiResponse {
   email?: string;
   fireBaseUUID?: string;
   gender?: string;
+  profileImageUrl?: string;
   active?: boolean;
   verified?: boolean;
   createdAt?: string;
@@ -256,6 +258,43 @@ class ApiService {
     }
   }
 
+  // Upload profile image to Firebase Storage
+  async uploadProfileImage(
+    mobileNumber: string,
+    imageUri: string,
+    userId: string
+  ): Promise<string> {
+    try {
+      console.log(`Uploading profile image to Firebase Storage for: ${mobileNumber}`);
+      const startTime = Date.now();
+
+      // Import Firebase Storage function
+      const { uploadProfileImage: firebaseUpload } = await import('../config/firebase');
+
+      // Upload to Firebase Storage
+      const downloadURL = await firebaseUpload(imageUri, userId, mobileNumber);
+
+      const duration = Date.now() - startTime;
+      console.log(`Firebase Storage upload completed in ${duration}ms`);
+      console.log('Firebase Storage download URL:', downloadURL);
+
+      return downloadURL;
+    } catch (error: any) {
+      console.log('Firebase Storage upload failed:', error.message);
+
+      // Provide more descriptive error messages
+      if (error.message.includes('storage/unauthorized')) {
+        throw new Error('Unauthorized to upload images. Please check your permissions.');
+      } else if (error.message.includes('storage/network-request-failed')) {
+        throw new Error('Network error. Please check your connection and try again.');
+      } else if (error.message.includes('storage/invalid-format')) {
+        throw new Error('Invalid image format. Please select a valid image file.');
+      } else {
+        throw new Error(`Failed to upload image: ${error.message}`);
+      }
+    }
+  }
+
   // Update user profile by mobile number
   async updateProfile(
     mobileNumber: string,
@@ -263,6 +302,7 @@ class ApiService {
       fullName: string;
       email: string;
       gender: string;
+      profileImageUrl?: string;
     }>
   ): Promise<ApiResponse> {
     try {

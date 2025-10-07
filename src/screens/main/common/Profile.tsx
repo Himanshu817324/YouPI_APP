@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   ScrollView,
   Alert,
@@ -12,17 +11,18 @@ import {useAuthStore} from '../../../store/authStore';
 import Toast from 'react-native-toast-message';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../../types/navigation';
+import ProfileImage from '../../../components/atoms/ProfileImage';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'Profile'>;
 
 const ProfileScreen = ({ navigation }: Props) => {
-  const {user, logout} = useAuthStore();
+  const { user, logout } = useAuthStore();
 
   const handleLogout = () => {
     Alert.alert('Logout', 'Are you sure you want to logout?', [
       {text: 'Cancel', style: 'cancel'},
       {
-        text: 'Logout', 
+        text: 'Logout',
         onPress: async () => {
           try {
             await logout();
@@ -45,14 +45,14 @@ const ProfileScreen = ({ navigation }: Props) => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#e2f8f1] dark:bg-background-dark">
-      <ScrollView className='px-5 flex-1'>
+      <ScrollView className="px-5 flex-1">
         <View className="items-center mt-8 mb-5">
-          <View className="w-[8rem] h-[8rem] border-2 border-[#00D09C] rounded-full mb-3 bg-[#3ED3A3] items-center justify-center">
-            <Text className="text-4xl font-bold text-white">
-              {user?.fullName?.charAt(0) || 'U'}
-            </Text>
-          </View>
-          <Text className="text-3xl font-semibold text-black dark:text-white">
+          <ProfileImage
+            imageUrl={user?.profileImageUrl}
+            fullName={user?.fullName || ''}
+            size={128}
+          />
+          <Text className="text-3xl font-semibold text-black dark:text-white mt-4">
             {user?.fullName || 'User'}
           </Text>
           <Text className="text-xl text-gray-500 dark:text-gray-400">

@@ -7,15 +7,18 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../../types/navigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppButton from '../../../components/atoms/AppButton';
 import LogoWithCircles from '../../../components/atoms/LogoWithCircles';
+import ProfileImage from '../../../components/atoms/ProfileImage';
 import Toast from 'react-native-toast-message';
 import { apiService } from '../../../services/apiService';
 import { useAuthStore } from '../../../store/authStore';
+import { launchImageLibrary, ImagePickerResponse, MediaType } from 'react-native-image-picker';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'EditProfile'>;
 
@@ -26,8 +29,10 @@ export default function EditProfileScreen({ navigation }: Props) {
     email: '',
     gender: '',
   });
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
 
   // Load existing profile data
@@ -43,6 +48,7 @@ export default function EditProfileScreen({ navigation }: Props) {
             email: user.email || '',
             gender: user.gender || '',
           });
+          setProfileImage(user.profileImageUrl || null);
           setInitialLoading(false);
           return;
         }
@@ -63,6 +69,7 @@ export default function EditProfileScreen({ navigation }: Props) {
               email: userData.email || '',
               gender: userData.gender || '',
             });
+            setProfileImage(userData.profileImageUrl || null);
           }
         }
       } catch (error: any) {
@@ -110,6 +117,48 @@ export default function EditProfileScreen({ navigation }: Props) {
     }
   };
 
+  const handleImagePicker = () => {
+    const options = {
+      mediaType: 'photo' as MediaType,
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
+      quality: 0.8,
+    };
+
+    launchImageLibrary(options, (response: ImagePickerResponse) => {
+      if (response.didCancel || response.errorMessage) {
+        return;
+      }
+
+      if (response.assets && response.assets[0]) {
+        const imageUri = response.assets[0].uri;
+        if (imageUri) {
+          setProfileImage(imageUri);
+        }
+      }
+    });
+  };
+
+  const uploadProfileImage = async (imageUri: string) => {
+    if (!user?.mobileNumber || !user?.fireBaseUUID) {
+      throw new Error('User mobile number or Firebase UID not found');
+    }
+
+    const formattedMobileNumber = user.mobileNumber.startsWith('+91') 
+      ? user.mobileNumber.replace('+91', '') 
+      : user.mobileNumber;
+
+    // Upload to Firebase Storage
+    const downloadURL = await apiService.uploadProfileImage(
+      formattedMobileNumber, 
+      imageUri, 
+      user.fireBaseUUID
+    );
+    
+    return downloadURL;
+  };
+
   const handleSubmit = async () => {
     if (!validateForm()) {
       Toast.show({
@@ -139,10 +188,33 @@ export default function EditProfileScreen({ navigation }: Props) {
 
       console.log('Updating profile for mobile:', formattedMobileNumber);
       
+      let profileImageUrl = user.profileImageUrl;
+
+      // Upload image if a new one was selected
+      if (profileImage && profileImage !== user.profileImageUrl) {
+        try {
+          setUploadingImage(true);
+          profileImageUrl = await uploadProfileImage(profileImage);
+          console.log('Image uploaded successfully:', profileImageUrl);
+        } catch (imageError: any) {
+          console.error('Image upload failed:', imageError);
+          Toast.show({
+            type: 'error',
+            text1: 'Image Upload Failed',
+            text2: imageError.message || 'Failed to upload image',
+          });
+          setUploadingImage(false);
+          return;
+        } finally {
+          setUploadingImage(false);
+        }
+      }
+      
       const updateData = {
         fullName: formData.fullname.trim(),
         email: formData.email.trim(),
         gender: formData.gender,
+        profileImageUrl: profileImageUrl,
       };
 
       console.log('Update data being sent:', updateData);
@@ -218,6 +290,26 @@ export default function EditProfileScreen({ navigation }: Props) {
             <Text className="text-center text-lg text-gray-600 mt-2">
               Update your information
             </Text>
+            
+            {/* Profile Image Section */}
+            <View className="mt-6 items-center">
+              <ProfileImage
+                imageUrl={profileImage || undefined}
+                fullName={formData.fullname || user?.fullName || ''}
+                size={120}
+                onPress={handleImagePicker}
+                showEditIcon={true}
+              />
+              <TouchableOpacity
+                onPress={handleImagePicker}
+                className="mt-3 px-4 py-2 bg-[#3ED3A3] rounded-lg"
+                disabled={uploadingImage}
+              >
+                <Text className="text-white font-semibold">
+                  {uploadingImage ? 'Uploading...' : 'Change Photo'}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View className="px-6">
@@ -300,11 +392,15 @@ export default function EditProfileScreen({ navigation }: Props) {
             </View>
 
             <AppButton
-              title={loading ? "Updating Profile..." : "Update Profile"}
+              title={
+                loading 
+                  ? (uploadingImage ? "Uploading Image..." : "Updating Profile...") 
+                  : "Update Profile"
+              }
               onPress={handleSubmit}
-              disabled={loading}
+              disabled={loading || uploadingImage}
               style={{
-                backgroundColor: loading ? '#ccc' : '#3ED3A3',
+                backgroundColor: (loading || uploadingImage) ? '#ccc' : '#3ED3A3',
                 paddingVertical: 16,
                 borderRadius: 20,
                 marginTop: 10,

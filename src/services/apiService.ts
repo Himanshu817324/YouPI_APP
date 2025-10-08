@@ -1,5 +1,7 @@
 ﻿// apiService.ts
 
+import { crashlyticsInstance, recordCrashlyticsError, logCrashlyticsEvent } from '../config/firebase';
+
 const BASE_URL = 'https://youpi-backend-fv2g.onrender.com/api';
 
 // Configuration constants
@@ -117,6 +119,9 @@ class ApiService {
         return data;
       } catch (error: any) {
         console.error(`API Error (${endpoint}) - Attempt ${attempt}:`, error);
+
+        // Log error to Crashlytics
+        recordCrashlyticsError(error, `API Error - ${endpoint} - Attempt ${attempt}`);
 
         // Don't retry on certain errors
         if (error.name === 'AbortError') {

@@ -17,13 +17,15 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
   showEditIcon = false,
 }) => {
   const getInitials = (name: string) => {
-    if (!name) return 'U';
-    
+    if (!name) {
+      return 'U';
+    }
+
     const names = name.trim().split(' ');
     if (names.length === 1) {
       return names[0].charAt(0).toUpperCase();
     }
-    
+
     return (names[0].charAt(0) + names[names.length - 1].charAt(0)).toUpperCase();
   };
 
@@ -110,6 +112,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2,
     borderColor: 'white',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   editIconText: {
     fontSize: 12,

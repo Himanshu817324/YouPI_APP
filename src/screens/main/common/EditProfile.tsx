@@ -19,6 +19,7 @@ import Toast from 'react-native-toast-message';
 import { apiService } from '../../../services/apiService';
 import { useAuthStore } from '../../../store/authStore';
 import { launchImageLibrary, ImagePickerResponse, MediaType } from 'react-native-image-picker';
+import { recordCrashlyticsError, logCrashlyticsEvent } from '../../../config/firebase';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'EditProfile'>;
 
@@ -74,6 +75,7 @@ export default function EditProfileScreen({ navigation }: Props) {
         }
       } catch (error: any) {
         console.error('Error loading profile data:', error);
+        recordCrashlyticsError(error, 'loadProfileData');
         Toast.show({
           type: 'error',
           text1: 'Error Loading Profile',
@@ -180,6 +182,10 @@ export default function EditProfileScreen({ navigation }: Props) {
 
     try {
       setLoading(true);
+      logCrashlyticsEvent('profile_edit_started', {
+        hasImage: !!profileImage,
+        fieldCount: Object.keys(formData).length
+      });
 
       // Ensure mobile number is in correct format (remove +91 prefix if present)
       const formattedMobileNumber = user.mobileNumber.startsWith('+91') 
@@ -247,6 +253,7 @@ export default function EditProfileScreen({ navigation }: Props) {
       }
     } catch (error: any) {
       console.error('Profile update error:', error);
+      recordCrashlyticsError(error, 'profileUpdate');
       Toast.show({
         type: 'error',
         text1: 'Profile Update Failed',

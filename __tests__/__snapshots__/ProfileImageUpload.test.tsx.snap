@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProfileImage Component generates correct initials for multiple names 1`] = `null`;
+
+exports[`ProfileImage Component generates correct initials for single name 1`] = `null`;
+
+exports[`ProfileImage Component handles empty name gracefully 1`] = `null`;
+
+exports[`ProfileImage Component renders with edit icon when showEditIcon is true 1`] = `null`;
+
+exports[`ProfileImage Component renders with image when imageUrl provided 1`] = `null`;
+
+exports[`ProfileImage Component renders with initials when no image provided 1`] = `null`;

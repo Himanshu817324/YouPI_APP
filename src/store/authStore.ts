@@ -12,6 +12,7 @@ import {
   onAuthStateChanged,
 } from '@react-native-firebase/auth';
 import { apiService, User as ApiUser } from '../services/apiService';
+import { recordCrashlyticsError, setCrashlyticsUserId, logCrashlyticsEvent } from '../config/firebase';
 
 type User = {
   id: number;
@@ -89,24 +90,39 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   loginWithBackend: async (apiUser) => {
-    console.log('loginWithBackend called with:', apiUser);
-    const userData: User = {
-      id: apiUser.id,
-      mobileNumber: apiUser.mobileNumber,
-      fullName: apiUser.fullName,
-      email: apiUser.email,
-      fireBaseUUID: apiUser.fireBaseUUID,
-      gender: apiUser.gender,
-      profileImageUrl: apiUser.profileImageUrl,
-      password: (apiUser as any).password,
-      active: apiUser.active,
-      verified: apiUser.verified,
-      createdAt: apiUser.createdAt,
-      updatedAt: apiUser.updatedAt,
-    };
-    await AsyncStorage.setItem('user', JSON.stringify(userData));
-    set({ user: userData, isLoggedIn: true });
-    console.log('User logged in successfully, isLoggedIn set to true');
+    try {
+      console.log('loginWithBackend called with:', apiUser);
+      const userData: User = {
+        id: apiUser.id,
+        mobileNumber: apiUser.mobileNumber,
+        fullName: apiUser.fullName,
+        email: apiUser.email,
+        fireBaseUUID: apiUser.fireBaseUUID,
+        gender: apiUser.gender,
+        profileImageUrl: apiUser.profileImageUrl,
+        password: (apiUser as any).password,
+        active: apiUser.active,
+        verified: apiUser.verified,
+        createdAt: apiUser.createdAt,
+        updatedAt: apiUser.updatedAt,
+      };
+      await AsyncStorage.setItem('user', JSON.stringify(userData));
+      set({ user: userData, isLoggedIn: true });
+      
+      // Set user ID in Crashlytics
+      setCrashlyticsUserId(apiUser.mobileNumber);
+      logCrashlyticsEvent('user_login', {
+        userId: apiUser.id.toString(),
+        mobileNumber: apiUser.mobileNumber,
+        hasProfileImage: !!apiUser.profileImageUrl
+      });
+      
+      console.log('User logged in successfully, isLoggedIn set to true');
+    } catch (error) {
+      console.error('Login with backend error:', error);
+      recordCrashlyticsError(error as Error, 'loginWithBackend');
+      throw error;
+    }
   },
 
   loginWithBackendAfterOTP: async (firebaseUid: string, mobileNo: string) => {
@@ -198,8 +214,13 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       await signOut(auth);
       await AsyncStorage.removeItem('user');
       set({ user: null, firebaseUser: null, verificationId: null, isLoggedIn: false });
+      
+      // Log logout event to Crashlytics
+      logCrashlyticsEvent('user_logout');
+      setCrashlyticsUserId(''); // Clear user ID
     } catch (error) {
       console.error('Logout error:', error);
+      recordCrashlyticsError(error as Error, 'logout');
       throw error;
     }
   },

@@ -8,6 +8,8 @@ import WalletScreen from './Wallet';
 import PlansScreen from './Plans';
 import SettingScreen from './Settings';
 import {wp, hp} from '../../../utils/dimensions';
+import {useAuthStore} from '../../../store/authStore';
+import ProfileImage from '../../../components/atoms/ProfileImage';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,28 +28,32 @@ type HomeHeaderRightProps = {
   navigation: BottomTabNavigationProp<any>;
 };
 
-const HomeHeaderRight = ({navigation}: HomeHeaderRightProps) => (
-  <View className="flex-row items-center gap-4 pr-6">
-    <View className="rounded-full p-[2px]" style={styles.glowCircle}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Notification')}
-        className="p-2 rounded-full border border-[#3ED3A3]">
-        <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
-      </TouchableOpacity>
+const HomeHeaderRight = ({navigation}: HomeHeaderRightProps) => {
+  const { user } = useAuthStore();
+  
+  return (
+    <View className="flex-row items-center gap-4 pr-6">
+      <View className="rounded-full p-[2px]" style={styles.glowCircle}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Notification')}
+          className="p-2 rounded-full border border-[#3ED3A3]">
+          <Ionicons name="notifications-outline" size={24} color="#3ED3A3" />
+        </TouchableOpacity>
+      </View>
+      <View className="rounded-full p-[2px]" style={styles.glowCircle}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Profile')}
+          className="border border-[#3ED3A3] rounded-full">
+          <ProfileImage
+            imageUrl={user?.profileImageUrl}
+            fullName={user?.fullName || ''}
+            size={48}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
-    <View className="rounded-full p-[2px]" style={styles.glowCircle}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Profile')}
-        className=" border border-[#3ED3A3] rounded-full">
-        <Image
-          source={require('../../../assets/profile-2.jpeg')}
-          className="w-12 h-12 rounded-full"
-          resizeMode="cover"
-        />
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+  );
+};
 
 const HomeHeaderLeft = () => (
   <View className="rounded-full w-auto p-[5px] mx-4 " style={styles.glowCircle}>

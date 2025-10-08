@@ -31,6 +31,7 @@ export default function EditProfileScreen({ navigation }: Props) {
     gender: '',
   });
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImageBase64, setProfileImageBase64] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -122,27 +123,33 @@ export default function EditProfileScreen({ navigation }: Props) {
   const handleImagePicker = () => {
     const options = {
       mediaType: 'photo' as MediaType,
-      includeBase64: false,
+      includeBase64: true,
       maxHeight: 2000,
       maxWidth: 2000,
       quality: 0.8,
+      selectionLimit: 1,
     };
 
     launchImageLibrary(options, (response: ImagePickerResponse) => {
       if (response.didCancel || response.errorMessage) {
+        console.log('Image picker cancelled or error:', response.errorMessage);
         return;
       }
 
       if (response.assets && response.assets[0]) {
-        const imageUri = response.assets[0].uri;
-        if (imageUri) {
-          setProfileImage(imageUri);
+        const asset = response.assets[0];
+        if (asset.uri && asset.base64) {
+          console.log('Selected image URI:', asset.uri);
+          console.log('Base64 data length:', asset.base64.length);
+          setProfileImage(asset.uri);
+          // Store base64 data for upload
+          setProfileImageBase64(asset.base64);
         }
       }
     });
   };
 
-  const uploadProfileImage = async (imageUri: string) => {
+  const uploadProfileImage = async (base64Data: string) => {
     if (!user?.mobileNumber || !user?.fireBaseUUID) {
       throw new Error('User mobile number or Firebase UID not found');
     }
@@ -151,10 +158,10 @@ export default function EditProfileScreen({ navigation }: Props) {
       ? user.mobileNumber.replace('+91', '') 
       : user.mobileNumber;
 
-    // Upload to Firebase Storage
-    const downloadURL = await apiService.uploadProfileImage(
-      formattedMobileNumber, 
-      imageUri, 
+    // Upload to Firebase Storage using base64 data
+    const downloadURL = await apiService.uploadProfileImageBase64(
+      formattedMobileNumber,
+      base64Data,
       user.fireBaseUUID
     );
     
@@ -197,10 +204,10 @@ export default function EditProfileScreen({ navigation }: Props) {
       let profileImageUrl = user.profileImageUrl;
 
       // Upload image if a new one was selected
-      if (profileImage && profileImage !== user.profileImageUrl) {
+      if (profileImageBase64 && profileImage !== user.profileImageUrl) {
         try {
           setUploadingImage(true);
-          profileImageUrl = await uploadProfileImage(profileImage);
+          profileImageUrl = await uploadProfileImage(profileImageBase64);
           console.log('Image uploaded successfully:', profileImageUrl);
         } catch (imageError: any) {
           console.error('Image upload failed:', imageError);
